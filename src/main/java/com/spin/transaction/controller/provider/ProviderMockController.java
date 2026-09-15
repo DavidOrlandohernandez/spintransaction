@@ -19,7 +19,7 @@ public class ProviderMockController {
     @PostMapping("/execute")
     public ProviderResponse execute(@RequestBody ProviderRequest request) {
 
-        if (request.getAmount().doubleValue() > 5000) {
+        if (request.getAmount().doubleValue() > 20000) {
             throw new RuntimeException("INSUFFICIENT_FUNDS");
         }
 
