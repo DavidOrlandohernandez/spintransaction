@@ -1,4 +1,4 @@
-package dto;
+package com.spin.transaction.dto;
 
 import com.spin.transaction.numbregeneratorservice.TransactionType;
 import jakarta.validation.constraints.*;

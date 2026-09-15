@@ -1,7 +1,7 @@
-package dto;
+package com.spin.transaction.dto;
 
-import com.spin.transaction.numbregeneratorservice.TransactionType;
 import com.spin.transaction.numbregeneratorservice.TransactionStatus;
+import com.spin.transaction.numbregeneratorservice.TransactionType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

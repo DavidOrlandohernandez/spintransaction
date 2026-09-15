@@ -1,7 +1,7 @@
 package com.spin.transaction.service;
 
-import dto.TransactionRequest;
-import dto.TransactionResponse;
+import com.spin.transaction.dto.TransactionRequest;
+import com.spin.transaction.dto.TransactionResponse;
 
 import java.util.List;
 import java.util.Optional;

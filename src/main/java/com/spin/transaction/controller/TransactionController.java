@@ -1,8 +1,8 @@
 package com.spin.transaction.controller;
 
 import com.spin.transaction.service.ITransactionServices;
-import dto.TransactionRequest;
-import dto.TransactionResponse;
+import com.spin.transaction.dto.TransactionRequest;
+import com.spin.transaction.dto.TransactionResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
 
 
 @RestController
@@ -30,7 +32,7 @@ public class TransactionController {
         TransactionResponse response = transactionServices.create(transactionRequest);
 
         return ResponseEntity
-                .status(HttpStatus.CREATED)
+                .created(URI.create("/api/v1/transactions/" + response.getId()))
                 .body(response);
     }
 }
