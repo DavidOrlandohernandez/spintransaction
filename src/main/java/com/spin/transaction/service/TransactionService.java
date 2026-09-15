@@ -4,7 +4,6 @@ import com.spin.transaction.numbregeneratorservice.TransactionStatus;
 import com.spin.transaction.numbregeneratorservice.TransactionType;
 import com.spin.transaction.dto.TransactionRequest;
 import com.spin.transaction.dto.TransactionResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,8 +13,11 @@ import java.util.UUID;
 @Service
 public class TransactionService implements  ITransactionServices{
 
-    @Autowired
-    BusinessRulesValidator businessRulesValidator;
+    private final BusinessRulesValidator validator;
+
+    public TransactionService(BusinessRulesValidator validator) {
+        this.validator = validator;
+    }
 
     @Override
     public TransactionResponse create(TransactionRequest transactionRequest) {
@@ -32,7 +34,7 @@ public class TransactionService implements  ITransactionServices{
         transactionResponse.setBalanceAfter(new BigDecimal("5500.00"));
         transactionResponse.setCreatedAt(OffsetDateTime.now());
 
-        businessRulesValidator.validate(transactionRequest);
+        validator.validate(transactionRequest);
 
 
         return  transactionResponse;
