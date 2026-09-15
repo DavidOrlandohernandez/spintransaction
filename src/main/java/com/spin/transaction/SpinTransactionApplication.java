@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpintransactionApplication {
+public class SpinTransactionApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpintransactionApplication.class, args);
+		SpringApplication.run(SpinTransactionApplication.class, args);
 	}
 
 }
