@@ -3,10 +3,7 @@ package com.spin.transaction.entity;
 import com.spin.transaction.numbregeneratorservice.TransactionType;
 import com.spin.transaction.numbregeneratorservice.TransactionStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -17,6 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "transactions")
 public class Transaction {
 
@@ -51,5 +49,4 @@ public class Transaction {
     @Column(nullable = false)
     private OffsetDateTime createdAt;
 
-    // getters and setters
 }

@@ -43,6 +43,10 @@ public class ProviderClient {
 
             // ✔ parseo del error del provider
             try {
+
+                System.out.println(ex.getResponseBodyAsString());
+                System.out.println(ex.getStatusCode());
+                System.out.println(ex.getResponseHeaders());
                 ProviderErrorResponse error =
                         objectMapper.readValue(
                                 ex.getResponseBodyAsString(),
@@ -50,6 +54,7 @@ public class ProviderClient {
                         );
 
                 throw new ProviderException(
+                        error.getStatus(),
                         error.getCode(),
                         error.getMessage()
                 );
@@ -57,6 +62,7 @@ public class ProviderClient {
             } catch (Exception parseException) {
 
                 throw new ProviderException(
+                        "400",
                         "UNKNOWN_ERROR",
                         "Error calling provider"
                 );

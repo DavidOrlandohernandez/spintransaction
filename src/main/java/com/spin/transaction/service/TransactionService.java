@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -34,14 +35,10 @@ public class TransactionService implements  ITransactionServices{
     @Override
     public TransactionResponse create(TransactionRequest transactionRequest) {
 
-        //1.- Validaciones de negocio.
         validator.validate(transactionRequest);
 
-        //2.- Crear entidad base
         Transaction transaction = new Transaction();
-
-        //transaction.setId(UUID.randomUUID());//Tal vez no debe de generarse aqui debido a que la clase ya tiene el suyo.
-        transaction.setAccountId(transactionRequest.getAccountId()); //LO CONTIENE EL REQUEST
+        transaction.setAccountId(transactionRequest.getAccountId());
         transaction.setType(transactionRequest.getType());
         transaction.setAmount(transactionRequest.getAmount());
         transaction.setCurrency(transactionRequest.getCurrency());
@@ -50,22 +47,18 @@ public class TransactionService implements  ITransactionServices{
 
         try{
 
-            //3.- Construcción de ProviderRequest
             ProviderRequest providerRequest = new ProviderRequest();
             providerRequest.setAccountId(transactionRequest.getAccountId());
             providerRequest.setType(transactionRequest.getType());
             providerRequest.setAmount(transactionRequest.getAmount());
 
-            //4.- LLamado de provider
             ProviderResponse providerResponse = providerClient.execute(providerRequest);
 
-            //5.- Escenario exitoso
             transaction.setStatus(providerResponse.getStatus());
             transaction.setProviderTransactionId(providerResponse.getTransactionId());
             transaction.setBalanceAfter(providerResponse.getBalance());
 
         }catch (ProviderException ex){
-            // 6. Escenario fallido
             transaction.setStatus(TransactionStatus.REJECTED);
             transaction.setProviderTransactionId(null);
             transaction.setBalanceAfter(null);
@@ -86,5 +79,28 @@ public class TransactionService implements  ITransactionServices{
         response.setCreatedAt(transactionSaved.getCreatedAt());
 
         return  response;
+    }
+
+    @Override
+    public List<TransactionResponse> findAll() {
+
+       List<Transaction> transactionList =
+               (List<Transaction>) transactionRepository.findAll();
+
+        return (List<TransactionResponse>) transactionList
+                 .stream()
+                 .map(transaction -> TransactionResponse.builder()
+                         .id(transaction.getId())
+                         .accountId(transaction.getAccountId())
+                         .type(transaction.getType())
+                         .amount(transaction.getAmount())
+                         .currency(transaction.getCurrency())
+                         .description(transaction.getDescription())
+                         .status(transaction.getStatus())
+                         .providerTransactionId(transaction.getProviderTransactionId())
+                         .balanceAfter(transaction.getBalanceAfter())
+                         .createdAt(transaction.getCreatedAt())
+                         .build()).
+                 toList();
     }
 }

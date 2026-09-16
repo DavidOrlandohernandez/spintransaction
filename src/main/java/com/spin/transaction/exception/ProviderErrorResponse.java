@@ -2,11 +2,16 @@ package com.spin.transaction.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Getter
+@NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class ProviderErrorResponse {
-    private String status;
+
     private String code;
+    private String status;
     private String message;
 }

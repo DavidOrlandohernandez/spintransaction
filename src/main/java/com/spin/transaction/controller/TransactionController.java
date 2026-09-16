@@ -7,12 +7,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 
 @RestController
@@ -33,5 +31,11 @@ public class TransactionController {
         return ResponseEntity
                 .created(URI.create("/api/v1/transactions/" + response.getId()))
                 .body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> findAll () {
+        List<TransactionResponse> response = transactionServices.findAll();
+        return ResponseEntity.ok(response);
     }
 }
