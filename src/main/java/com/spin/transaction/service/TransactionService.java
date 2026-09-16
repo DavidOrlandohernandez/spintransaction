@@ -72,6 +72,12 @@ public class TransactionService implements  ITransactionServices{
 
         Transaction transactionSaved = transactionRepository.save(transaction);
 
+        TransactionResponse response = getTransactionResponse(transactionSaved);
+
+        return  response;
+    }
+
+    private static TransactionResponse getTransactionResponse(Transaction transactionSaved) {
         TransactionResponse response = new TransactionResponse();
         response.setId(transactionSaved.getId());
         response.setAccountId(transactionSaved.getAccountId());
@@ -83,17 +89,16 @@ public class TransactionService implements  ITransactionServices{
         response.setProviderTransactionId(transactionSaved.getProviderTransactionId());
         response.setBalanceAfter(transactionSaved.getBalanceAfter());
         response.setCreatedAt(transactionSaved.getCreatedAt());
-
-        return  response;
+        return response;
     }
 
     @Override
     public List<TransactionResponse> findAll() {
 
        List<Transaction> transactionList =
-               (List<Transaction>) transactionRepository.findAll();
+               transactionRepository.findAll();
 
-        return (List<TransactionResponse>) transactionList
+        return transactionList
                  .stream()
                  .map(transaction -> TransactionResponse.builder()
                          .id(transaction.getId())
