@@ -9,13 +9,20 @@ import com.spin.transaction.exception.ResourceNotFoundException;
 import com.spin.transaction.numbregeneratorservice.TransactionStatus;
 import com.spin.transaction.dto.TransactionRequest;
 import com.spin.transaction.dto.TransactionResponse;
+import com.spin.transaction.numbregeneratorservice.TransactionType;
 import com.spin.transaction.repository.TransactionRepository;
-import org.springframework.http.ResponseEntity;
+import com.spin.transaction.specification.TransactionSpecification;
 import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+
+import org.springframework.data.jpa.domain.Specification;
 
 @Service
 public class TransactionService implements  ITransactionServices{
@@ -123,4 +130,41 @@ public class TransactionService implements  ITransactionServices{
                   .createdAt(transaction.getCreatedAt())
               .build();
         }
+
+
+    @Override
+    public Page<TransactionResponse> findTransactions(
+            String accountId,
+            TransactionStatus status,
+            TransactionType type,
+            int page,
+            int limit
+    ) {
+
+        Pageable pageable = PageRequest.of(page, limit, Sort.by("createdAt").descending());
+
+        Specification<Transaction> spec =
+                TransactionSpecification.filter(accountId, status, type);
+
+        Page<Transaction> transactions =
+                transactionRepository.findAll(spec, pageable);
+
+        return transactions.map(this::mapToResponse);
+    }
+
+    private TransactionResponse mapToResponse(Transaction transaction) {
+
+        return TransactionResponse.builder()
+                .id(transaction.getId())
+                .accountId(transaction.getAccountId())
+                .type(transaction.getType())
+                .amount(transaction.getAmount())
+                .currency(transaction.getCurrency())
+                .description(transaction.getDescription())
+                .status(transaction.getStatus())
+                .providerTransactionId(transaction.getProviderTransactionId())
+                .balanceAfter(transaction.getBalanceAfter())
+                .createdAt(transaction.getCreatedAt())
+                .build();
+    }
 }
