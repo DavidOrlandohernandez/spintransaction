@@ -5,17 +5,16 @@ import com.spin.transaction.dto.ProviderRequest;
 import com.spin.transaction.dto.ProviderResponse;
 import com.spin.transaction.entity.Transaction;
 import com.spin.transaction.exception.ProviderException;
+import com.spin.transaction.exception.ResourceNotFoundException;
 import com.spin.transaction.numbregeneratorservice.TransactionStatus;
-import com.spin.transaction.numbregeneratorservice.TransactionType;
 import com.spin.transaction.dto.TransactionRequest;
 import com.spin.transaction.dto.TransactionResponse;
 import com.spin.transaction.repository.TransactionRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -103,4 +102,25 @@ public class TransactionService implements  ITransactionServices{
                          .build()).
                  toList();
     }
+
+    @Override
+    public TransactionResponse findTransactionById(UUID id) {
+
+        Transaction transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Transaction not found: " + id));
+
+        return TransactionResponse
+              .builder()
+                  .id(transaction.getId())
+                  .accountId(transaction.getAccountId())
+                  .type(transaction.getType())
+                  .amount(transaction.getAmount())
+                  .currency(transaction.getCurrency())
+                  .description(transaction.getDescription())
+                  .status(transaction.getStatus())
+                  .providerTransactionId(transaction.getProviderTransactionId())
+                  .balanceAfter(transaction.getBalanceAfter())
+                  .createdAt(transaction.getCreatedAt())
+              .build();
+        }
 }

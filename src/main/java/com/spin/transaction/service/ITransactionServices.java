@@ -6,6 +6,7 @@ import com.spin.transaction.entity.Transaction;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface ITransactionServices {
 
@@ -13,6 +14,7 @@ public interface ITransactionServices {
 
     List<TransactionResponse> findAll();
 
+    TransactionResponse findTransactionById(UUID id);
 
 }
 

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 
 @RestController
@@ -34,8 +36,14 @@ public class TransactionController {
     }
 
     @GetMapping
-    public ResponseEntity<?> findAll () {
+    public ResponseEntity<?> findTransaction() {
         List<TransactionResponse> response = transactionServices.findAll();
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findTransactionById(@PathVariable UUID id) {
+        TransactionResponse transaction = transactionServices.findTransactionById(id);
+        return ResponseEntity.ok(transaction);
     }
 }

@@ -26,5 +26,4 @@ public class TransactionResponse {
     private BigDecimal balanceAfter;
     private OffsetDateTime createdAt;
 
-
 }

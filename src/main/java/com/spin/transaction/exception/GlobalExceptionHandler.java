@@ -88,4 +88,15 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest().body(response);
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException ex) {
+        ErrorResponse response = new ErrorResponse(
+                "NOT_FOUND",
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                OffsetDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
 }
