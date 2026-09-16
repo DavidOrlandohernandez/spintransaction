@@ -5,6 +5,7 @@ import com.spin.transaction.numbregeneratorservice.TransactionType;
 import com.spin.transaction.service.ITransactionServices;
 import com.spin.transaction.dto.TransactionRequest;
 import com.spin.transaction.dto.TransactionResponse;
+import com.spin.transaction.wraper.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions")
-    public ResponseEntity<Page<TransactionResponse>> getTransactions(
+    public  ResponseEntity<PageResponse<TransactionResponse>>  getTransactions(
 
             @RequestParam(required = false) String accountId,
             @RequestParam(required = false) TransactionStatus status,
@@ -60,9 +61,8 @@ public class TransactionController {
             @RequestParam(defaultValue = "10") int limit
     ) {
 
-        Page<TransactionResponse> response =
-                transactionServices.findTransactions(accountId, status, type, page, limit);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(
+                transactionServices.findTransactions(accountId, status, type, page, limit)
+        );
     }
 }

@@ -12,6 +12,8 @@ import com.spin.transaction.dto.TransactionResponse;
 import com.spin.transaction.numbregeneratorservice.TransactionType;
 import com.spin.transaction.repository.TransactionRepository;
 import com.spin.transaction.specification.TransactionSpecification;
+import com.spin.transaction.wraper.Meta;
+import com.spin.transaction.wraper.PageResponse;
 import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -133,7 +135,7 @@ public class TransactionService implements  ITransactionServices{
 
 
     @Override
-    public Page<TransactionResponse> findTransactions(
+    public PageResponse<TransactionResponse> findTransactions(
             String accountId,
             TransactionStatus status,
             TransactionType type,
@@ -149,7 +151,17 @@ public class TransactionService implements  ITransactionServices{
         Page<Transaction> transactions =
                 transactionRepository.findAll(spec, pageable);
 
-        return transactions.map(this::mapToResponse);
+        List<TransactionResponse> data = transactions
+                .map(this::mapToResponse)
+                .getContent();
+
+        Meta meta = new Meta(
+                page,
+                limit,
+                transactions.getTotalElements()
+        );
+
+        return new PageResponse<>(data, meta);
     }
 
     private TransactionResponse mapToResponse(Transaction transaction) {

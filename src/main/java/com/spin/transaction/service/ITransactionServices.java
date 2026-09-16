@@ -5,6 +5,7 @@ import com.spin.transaction.dto.TransactionResponse;
 import com.spin.transaction.entity.Transaction;
 import com.spin.transaction.numbregeneratorservice.TransactionStatus;
 import com.spin.transaction.numbregeneratorservice.TransactionType;
+import com.spin.transaction.wraper.PageResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface ITransactionServices {
 
     TransactionResponse findTransactionById(UUID id);
 
-    public Page<TransactionResponse> findTransactions(
+    public PageResponse<TransactionResponse> findTransactions(
             String accountId,
             TransactionStatus status,
             TransactionType type,

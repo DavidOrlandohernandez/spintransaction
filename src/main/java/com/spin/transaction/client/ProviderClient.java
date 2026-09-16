@@ -18,12 +18,10 @@ public class ProviderClient {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public ProviderClient() {
-
-        // ✔ RestTemplate simple (SIN dependencias externas)
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        SimpleClientHttpRequestFactory factory =
+                new SimpleClientHttpRequestFactory();
         factory.setConnectTimeout(5000);
         factory.setReadTimeout(5000);
-
         this.restTemplate = new RestTemplate(factory);
     }
 
@@ -32,7 +30,7 @@ public class ProviderClient {
         String url = "http://localhost:8085/provider/v1/execute";
 
         try {
-            // ✔ llamada HTTP normal
+
             return restTemplate.postForObject(
                     url,
                     request,
@@ -40,19 +38,12 @@ public class ProviderClient {
             );
 
         } catch (HttpClientErrorException | HttpServerErrorException ex) {
-
-            // ✔ parseo del error del provider
             try {
-
-                System.out.println(ex.getResponseBodyAsString());
-                System.out.println(ex.getStatusCode());
-                System.out.println(ex.getResponseHeaders());
                 ProviderErrorResponse error =
                         objectMapper.readValue(
                                 ex.getResponseBodyAsString(),
                                 ProviderErrorResponse.class
                         );
-
                 throw new ProviderException(
                         error.getStatus(),
                         error.getCode(),
@@ -60,7 +51,6 @@ public class ProviderClient {
                 );
 
             } catch (Exception parseException) {
-
                 throw new ProviderException(
                         "400",
                         "UNKNOWN_ERROR",
