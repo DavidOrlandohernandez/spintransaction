@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+
+  localcredit-app:
+    build: .
+    container_name: localcredit-app
+    ports:
+      - "8085:8085"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    restart: unless-stopped

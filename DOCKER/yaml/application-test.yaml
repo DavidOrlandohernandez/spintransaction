@@ -1,0 +1,20 @@
+server:
+  port: 8085
+
+spring:
+  datasource:
+    url: jdbc:postgresql://host.docker.internal:5433/localcredit
+    #jdbc:postgresql://localhost:5433/localcredit
+    #url: jdbc:postgresql://host.docker.internal:5433/localcredit
+    username: postgres
+    password: 150919
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+

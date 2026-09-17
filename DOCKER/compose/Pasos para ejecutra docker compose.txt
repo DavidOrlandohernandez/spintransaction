@@ -1,0 +1,22 @@
+# DOCKER COMPOSE - COMANDOS BÁSICOS
+
+# 1. Ir a la carpeta del proyecto
+cd ruta/del/proyecto
+
+# 2. Levantar servicios (con build)
+docker compose up --build
+
+# 3. Levantar en segundo plano
+docker compose up -d --build
+
+# 4. Ver contenedores
+docker compose ps
+
+# 5. Ver logs
+docker compose logs -f
+
+# 6. Detener servicios
+docker compose down
+
+# 7. Detener y eliminar todo (incluye volúmenes)
+docker compose down -v
