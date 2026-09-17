@@ -4,8 +4,11 @@ import com.spin.transaction.numbregeneratorservice.TransactionType;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 
+@Setter
 @Getter
 @NoArgsConstructor
 public class TransactionRequest {
