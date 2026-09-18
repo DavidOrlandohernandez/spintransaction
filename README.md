@@ -74,7 +74,7 @@ Tras clonar o descargar el proyecto y abrirlo en tu IDE de preferencia, sigue es
 
 ### Requisitos Mínimos
 * Java JDK `17.0.12 LTS`.
-* Instancia de base de datos activa con la base `localcredit`.
+* Base de datos creada con el nombre: localcredit.
 
 ### Pasos de Ejecución
 1. Configurar la cadena de conexión en `application-dev.yaml`.
