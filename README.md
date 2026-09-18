@@ -78,6 +78,23 @@ java -jar app.jar --spring.profiles.active=prod
 
 
 
+4.- Intrucciones para ejecutar DockerFile en entorno Docker. 
+Colocarse en la ruta DOCKER del proyecto y en un entorno dockerizado realizar 
+los siguientes comandos: 
+Ejemplo root: PS C:\Users\DAVID\Desktop\DOCUMENTACION\REPOSITORIOS\spintransaction\DOCKER> 
+
+1.- Crear la imagen      : docker build -t app .
+2.- Comprobacion de la imagen : docker images / app:latest  Ejemplo: 432408856830        629MB          226MB    U
+3.- Crear el contenedor  : docker run -p 8085:8085 -e SPRING_PROFILES_ACTIVE=prod app
+Nota: Uso de perfiles prod, test, dev Usar PROD.
+
+NOTAS: 
+2.- Recordar que la ruta del POSTGRES DEBE DE IR DE LA SIG FORMA: PUENTE DOCKER LOCAL
+spring.datasource.url=jdbc:postgresql://host.docker.internal:5433/localcredit
+
+
+
+
 
 4- Desición de la estructura y arquitectura del proyecto:
 
