@@ -1,108 +1,132 @@
-# spintransaction
-Proyecto Spin By Oxxo proceso de selección 
+# SpinTransaction 🚀
+> **Proyecto para proceso de selección Spin By Oxxo**
 
-1.- Stack Tecnológico utilizado:
-* Maven proyect
-* Lenguaje 17.0.12 2024-07-16 LTS 
-* Spring Boot 4.1.1
-* PostgreSQL 17 
-* Packaging  tipo Jar
-* Properties tipo Yaml
+---
 
-1.1 - Dependencias iniciales: 
-* Spring Boot DevTools
-* Spring Web
-* Loombook 
-* Spring Data JPA 
-* PostgreSQL Driver
+## 🛠️ 1. Stack Tecnológico
 
-1.2- Dependencias extras relevantes
-* org.mapstruct 1.5.5-Final : Reducción de BoilerPlate.
-* Junit-jupiter 6.0.3: Fase de testing automatizado.
-* MockMvc: Fase de testing simulación de servidor. 
-* org.springdoc (Swagger - OpenApi): Documentación ordenada estándar OpenAPI.
-* slf4j: Logs dentro del servicio - Medida de observabilidad. 
-* org.jacoco 0.8.12: Calcular cobertura de pruebas - repostería.  
+* **Proyecto Base:** Maven
+* **Lenguaje:** Java `17.0.12 LTS` (2024-07-16)
+* **Framework:** Spring Boot `4.1.1`
+* **Base de Datos:** PostgreSQL `17`
+* **Empaquetado:** JAR
+* **Configuración:** YAML (`application-dev.yaml`)
 
-1.3- Herramientas utilizadas para el desarrollo. 
-* IntelliJ IDEA: Ide de desarrollo. 
-* PgAdmin 4: Entorno Sql Local. 
-* Postman: Pruebas unitarias. 
-* GitHub Desktop: Herramientas de control de versiones. 
-* Docker Desktop for Windows: Simulador de docker para uso local. 
+### 1.1 Dependencias Iniciales
+* `Spring Boot DevTools`
+* `Spring Web`
+* `Lombok`
+* `Spring Data JPA`
+* `PostgreSQL Driver`
 
+### 1.2 Dependencias Extras Relevantes
+* **MapStruct (`org.mapstruct 1.5.5-Final`):** Reducción de código repetitivo (Boilerplate).
+* **JUnit Jupiter (`6.0.3`):** Fase de testing automatizado.
+* **MockMvc:** Simulación de servidor para testing.
+* **SpringDoc (`Swagger / OpenAPI`):** Documentación ordenada bajo estándares OpenAPI.
+* **SLF4J:** Registros y logs del servicio (Observabilidad).
+* **JaCoCo (`0.8.12`):** Generación de reportes y métricas de cobertura de pruebas.
 
+### 1.3 Herramientas de Desarrollo
+* **IDE:** IntelliJ IDEA
+* **SQL Client Local:** PgAdmin 4
+* **Testing API:** Postman
+* **Control de Versiones:** GitHub Desktop
+* **Contenedores:** Docker Desktop for Windows
 
-2-. Instrucciones de compilación del proyecto:
-Tras descargar el proyecto y abrirlo en el IDE de su elección. 
+---
 
-Seguir los siguientes pasos para una compilación exitosa.
+## 🛠️ 2. Instrucciones de Compilación
 
-Requisitos mínimos: 
-* Tener instalado y configurado Maven.
-* Tener instalado y configurado versión de Java 17.0.12 2024-07-16 LTS. 
-* Tener una instancia de SQL Server 17 o Superior. 
-* Necesario Crear una base de datos con el nombre: "localcredit".
+Tras clonar o descargar el proyecto y abrirlo en tu IDE de preferencia, sigue estos pasos para una compilación exitosa.
 
-2.1- Modificar el application-dev.yaml Según el puerto de exposición de la base de datos:
-Ejemplo:  url: jdbc:postgresql://localhost:5432/localcredit
-2.2- Colocarse en la ruta del proyecto. (Corresponder a su local)
-"PS C:\Users\e_dohernandez\Downloads\PRACTICAS DE GIT\spintransaction>"
-2.3- Ejecutar los siguientes comandos en el siguiente orden. 
-* mvn clean
-* mvn compile
-* mvn install "En caso de tener problemas ejecutar el siguiente sin TEST"
-* mvn install -DskipTests
-* mvn package -DskipTests
+### Requisitos Mínimos
+* Maven instalado y configurado en el sistema.
+* Java JDK `17.0.12 LTS` instalado y configurado.
+* Instancia de PostgreSQL (o SQL Server compatible) versión 17 o superior.
+* Base de datos creada con el nombre: **`localcredit`**.
 
-NOTA: Configurar su IDE de acuerdo a la tecnologias aquí descritas. 
+### Pasos para Compilar
+1. **Configurar Base de Datos:**  
+   Modifica el archivo `application-dev.yaml` ajustando la URL según el puerto de tu base de datos:
+   ```yaml
+   url: jdbc:postgresql://localhost:5432/localcredit
+   ```
+2. **Ubicarse en el directorio raíz del proyecto:**
+   ```bash
+   cd "C:\ruta\a_tu_proyecto\spintransaction"
+   ```
+3. **Ejecutar los siguientes comandos en orden:**
+   ```bash
+   mvn clean
+   mvn compile
+   mvn install
+   ```
+   > 💡 *Nota:* En caso de tener problemas con las pruebas durante la instalación, ejecuta sin tests:
+   ```bash
+   mvn install -DskipTests
+   mvn package -DskipTests
+   ```
 
+---
 
+## 💻 3. Ejecución en Entorno Local
 
+### Requisitos Mínimos
+* Java JDK `17.0.12 LTS`.
+* Instancia de base de datos activa con la base `localcredit`.
 
-3.- Instrucciones para ejecutar el proyecto entorno LOCAL:
-Requisitos mínimos: 
-* Tener instalado y configurado versión de Java 17.0.12 2024-07-16 LTS. 
-* Tener una instancia de SQL Server 17 o Superior.
-* Necesario Crear una base de datos con el nombre: "localcredit".
+### Pasos de Ejecución
+1. Configurar la cadena de conexión en `application-dev.yaml`.
+2. Abrir una terminal en la carpeta `LOCAL` que viene dentro del proyecto.
+3. Ejecutar el artefacto mediante el comando:
+   ```bash
+   java -jar app.jar --spring.profiles.active=dev
+   ```
 
-3.1- Modificar el application-dev.yaml Según el puerto de exposición de la base de datos:
-Ejemplo:  url: jdbc:postgresql://localhost:5432/localcredit
-3.2- Abrir una línea de comando en la carpeta LOCAL que viene en el proyecto. 
-3.3- Ejecutar el siguiente comando:
-java -jar app.jar --spring.profiles.active=prod
+---
 
+## 🐳 4. Ejecución en Entorno Docker
 
+Ubicarse en la ruta `DOCKER` dentro del proyecto y ejecutar los siguientes comandos desde un entorno dockerizado:
 
-4.- Instrucciones para ejecutar DockerFile en entorno DOCKER. 
-Colocarse en la ruta DOCKER del proyecto y en un entorno dockerizado realizar 
-los siguientes comandos: 
-Ejemplo root: PS C:\Users\DAVID\Desktop\DOCUMENTACION\REPOSITORIOS\spintransaction\DOCKER> 
+```bash
+# Ejemplo de ruta local: C:\spintransaction\DOCKER>
+```
 
-4.1- Crear la imagen      : docker build -t app .
-4.2- Comprobación de la imagen : docker images / app:latest  Ejemplo: 432408856830        629MB          226MB    U
-4.3- Crear el contenedor  : docker run -p 8085:8085 -e SPRING_PROFILES_ACTIVE=prod app
-Nota: Uso de perfiles prod, test, dev. Usar PROD.
+1. **Construir la imagen:**
+   ```bash
+   docker build -t app .
+   ```
+2. **Comprobar la imagen generada:**
+   ```bash
+   docker images app:latest
+   ```
+3. **Crear y desplegar el contenedor:**
+   ```bash
+   docker run -p 8085:8085 -e SPRING_PROFILES_ACTIVE=prod app
+   ```
 
-NOTAS: 
-* Recordar que la ruta del POSTGRES DEBE DE IR DE LA SIG FORMA: PUENTE DOCKER LOCAL
-spring.datasource.url=jdbc:postgresql://host.docker.internal:5433/localcredit
-Esto ya está aplicado para tener cuidado con el puerto. 
+> 📌 **Notas Importantes sobre Docker:**
+> * Perfiles disponibles: `prod`, `test`, `dev`. Se recomienda usar **`prod`**.
+> * La cadena de conexión a PostgreSQL para conectar el contenedor con el host local debe usar el puente Docker-Host:
+>   ```properties
+>   spring.datasource.url=jdbc:postgresql://host.docker.internal:5433/localcredit
+>   ```
 
+---
 
+## 🏗️ 5. Estructura y Arquitectura del Proyecto
 
+El proyecto está estructurado bajo una **Arquitectura en Capas (*Layered Architecture*)** utilizando Spring Boot. Mantiene una separación clara de responsabilidades que garantiza un diseño modular, escalable y mantenible.
 
+* **Enfoque RESTful:** La comunicación externa se realiza mediante DTOs, desacoplando el modelo de persistencia (`Entities`) de los contratos expuestos en la API.
+* **Consultas Dinámicas:** Uso de `Specifications` para filtrados y búsquedas complejas.
+* **Mapeo Centralizado:** Integración de `Mappers` (MapStruct) para la conversión limpia de objetos.
 
-4- Decisión de la estructura y arquitectura del proyecto:
-El proyecto está estructurado bajo una arquitectura en capas (Layered Architecture) 
-utilizando Spring Boot, con una separación clara de responsabilidades que permite mantener un 
-diseño modular, escalable y fácil de mantener. Se implementa un enfoque RESTful donde la 
-comunicación se realiza mediante DTOs, desacoplando el modelo de persistencia (Entities) 
-del modelo expuesto a la API. Además, se incorpora el uso de Specifications para 
-consultas dinámicas y un sistema de mapeo centralizado mediante Mappers.
+### 📂 Estructura de Directorios
 
-4.1- Representación de (Layered Architecture):
-
+```text
 com.spin.transaction
 ├── SpinTransactionApplication.java
 ├── client
@@ -117,44 +141,40 @@ com.spin.transaction
 ├── service
 ├── specification
 └── wrapper
+```
 
+---
 
-5.- COBERTURA DE IMPLEMENTACIÓN:
-* Implementacion de spring initializr: Generación base del proyecto. 
-* Implementación de Mock por medio de servicios: Se usó Un controller separado como Mock para la respuesta de proveedor. 
-* Implementación de Jacoco: Documentación de la cobertura de pruebas. 
-* Implementación de Swagger - OpenAPI Standar: Documentación de contratos y testing. 
-* Implementación de pruebas con Junit y Mocks: Test automatizados. 
-* Implementación de pruebas unitarias con Postman: Test unitarios. Se compartirá la colección. 
-* Implementación de docker con DockerFile y Docker-Compose: Se genera imagen base para dockerizar manualmente y por compose. 
-* Implementación de Mapstuct: Reducción de BoilerPlate.
-* Implementación de Logs con slf4j.
+## 📊 6. Cobertura de Implementación
 
+- [x] **Spring Initializr:** Estructuración base del proyecto.
+- [x] **Mocks de Servicios:** Controller independiente simulando respuestas del proveedor externo.
+- [x] **JaCoCo:** Generación y documentación de métricas de cobertura de código.
+- [x] **Swagger / OpenAPI Standard:** Documentación interactiva de contratos de API.
+- [x] **Testing Automatizado:** Pruebas de integración e unitarias con JUnit y Mocks.
+- [x] **Colección de Postman:** Pruebas unitarias/funcionales (colección compartida en el repositorio).
+- [x] **Dockerización:** Configuración con `Dockerfile` y `docker-compose`.
+- [x] **MapStruct:** Mapeo eficiente para reducción de *boilerplate*.
+- [x] **Observabilidad:** Trazado de logs con SLF4J.
 
+---
 
-6.- CONCLUSIONES FINALES
-El proyecto está construido sobre un stack moderno basado en Java 17 LTS y Spring Boot, lo que garantiza estabilidad, 
-rendimiento y soporte a largo plazo. El uso de Maven como gestor de dependencias permite mantener un control ordenado 
-del ciclo de vida del proyecto, mientras que PostgreSQL 17 aporta una base de datos robusta y confiable para entornos 
-productivos.
-La elección de Spring Boot como framework principal facilita el desarrollo de servicios REST escalables y bien estructurados, 
-reduciendo la complejidad de configuración y acelerando la entrega de funcionalidades. Complementado con Spring Data JPA, 
-Se simplifica el acceso a datos, permitiendo una integración eficiente con la base de datos. Además, herramientas como Lombok 
-optimizan la productividad al reducir código repetitivo, y DevTools mejora la experiencia de desarrollo con recarga automática.
-El uso de YAML para la configuración aporta mayor claridad y organización en comparación con formatos tradicionales.
-En conjunto, este stack tecnológico ofrece un equilibrio sólido entre productividad, mantenibilidad y escalabilidad, 
-lo que lo convierte en una base confiable para construir servicios REST competitivos y preparados para entornos empresariales 
-reales.
+## 📝 7. Conclusiones Finales
 
+El proyecto está construido sobre un stack moderno basado en **Java 17 LTS** y **Spring Boot**, lo que garantiza estabilidad, rendimiento y soporte a largo plazo. El uso de Maven como gestor de dependencias permite mantener un control ordenado del ciclo de vida del proyecto, mientras que **PostgreSQL 17** aporta una base de datos robusta y confiable para entornos productivos.
 
-:::Si llegaste hasta aca te agradezco mucho tu atención espero sea de su agrado este pequeño proyecto.:::
+La elección de Spring Boot facilita el desarrollo de servicios REST escalables y bien estructurados, reduciendo la complejidad de configuración. Complementado con **Spring Data JPA**, se simplifica el acceso a datos. Además, herramientas como Lombok y DevTools optimizan la productividad y la experiencia de desarrollo. El uso de YAML para la configuración aporta claridad en comparación con formatos tradicionales.
 
-No se utilizó IA generativa para este proyecto. Más bien si use IA pero como 
-consultor de dudas e implementación de algunas partes del proyecto. 
-cada parte del código se realizó paso a paso.  Comit por comit. 
-IA utilizada: ChatGPT basada en el modelo GPT-5.6-mini.
-Apoyos significativos de la IA:
+En conjunto, este stack ofrece un equilibrio sólido entre productividad, mantenibilidad y escalabilidad, convirtiéndolo en una base confiable para servicios REST de nivel empresarial.
 
-* En la generación del GET para la paginación. Interesante uso specification
-* Pruebas con SpringBootTest y Junit.
-* Algunas dudas sobre el manejo de excepciones agrupadas. 
+---
+
+> 🤝 *Si llegaste hasta aquí, agradezco mucho tu atención y tiempo dedicado a la revisión. ¡Espero que este proyecto sea de tu agrado!*
+
+### 💡 Nota sobre el uso de Inteligencia Artificial
+No se utilizó IA generativa para la escritura directa del proyecto. Se empleó **ChatGPT (Modelo GPT-5.6-mini)** como **consultor técnico** para resolver dudas puntuales de implementación. Cada parte del código fue desarrollada paso a paso, *commit* por *commit*.
+
+**Apoyos significativos de la IA:**
+* Diseño de consulta `GET` con paginación dinámica utilizando `Specifications`.
+* Configuración de pruebas unitarias y de integración con `@SpringBootTest` y JUnit.
+* Estructuración y manejo centralizado de excepciones agrupadas.
