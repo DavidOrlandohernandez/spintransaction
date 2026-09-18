@@ -17,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -27,6 +30,9 @@ import java.util.UUID;
 @Tag(name = "Transaction - Controller",
         description = "API REST que gestiona la ejecución de transacciones financieras (crédito y débito).")
 public class TransactionController {
+
+    private static final Logger log =
+            LoggerFactory.getLogger(TransactionController.class);
 
     @Autowired
     private ITransactionServices transactionServices;
@@ -58,7 +64,9 @@ public class TransactionController {
     public ResponseEntity<TransactionResponse> create(
             @Valid @RequestBody TransactionRequest transactionRequest) {
 
+        log.info("POST /Transaction recibido: {}", transactionRequest);
         TransactionResponse response = transactionServices.create(transactionRequest);
+        log.info("POST /Transaction response generado: {}", response);
 
         return ResponseEntity
                 .created(URI.create("/api/v1/transactions/" + response.getId()))
@@ -95,6 +103,8 @@ public class TransactionController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int limit
     ) {
+        log.info("GET /Transaction consulta paginada: {}", "accountId:" + accountId + "page:" + page + "lmit:" + limit);
+
         return ResponseEntity.ok(
                 transactionServices.findTransactions(accountId, status, type, page, limit)
         );

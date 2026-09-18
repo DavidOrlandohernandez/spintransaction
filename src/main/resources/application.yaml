@@ -4,7 +4,6 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/localcredit
-    # url: jdbc:postgresql://host.docker.internal:5433/localcredit
     username: postgres
     password: 1234
 
@@ -16,4 +15,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+provider:
+  url: http://localhost:8085/provider/v1/execute
 

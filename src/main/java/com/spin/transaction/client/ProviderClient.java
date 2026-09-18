@@ -4,16 +4,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spin.transaction.dto.ProviderRequest;
 import com.spin.transaction.dto.ProviderResponse;
 import com.spin.transaction.exception.ProviderException;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import com.spin.transaction.exception.ProviderErrorResponse;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class ProviderClient {
 
+    @Value("${provider.url}")
+    private String providerUrl;
+
+    private static final Logger log = LoggerFactory.getLogger(ProviderClient.class);
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -27,10 +35,11 @@ public class ProviderClient {
 
     public ProviderResponse execute(ProviderRequest request) {
 
-        String url = "http://localhost:8085/provider/v1/execute";
+        String url = providerUrl;
 
         try {
 
+            log.info("Iniciando llamado de proveedor accountId: : {},{}", request.getAccountId(),providerUrl);
             return restTemplate.postForObject(
                     url,
                     request,
@@ -39,11 +48,15 @@ public class ProviderClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException ex) {
             try {
+
+                log.info("Error inesperado de proveedor: : {}", request.getAccountId());
                 ProviderErrorResponse error =
                         objectMapper.readValue(
                                 ex.getResponseBodyAsString(),
                                 ProviderErrorResponse.class
                         );
+
+                log.info("Error inesperado de proveedor:{},{},{}", error.getMessage(), error.getStatus(), error.getCode());
                 throw new ProviderException(
                         error.getStatus(),
                         error.getCode(),

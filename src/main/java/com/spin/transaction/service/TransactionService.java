@@ -1,11 +1,12 @@
 package com.spin.transaction.service;
 
 import com.spin.transaction.client.ProviderClient;
-import com.spin.transaction.dto.ProviderRequest;
 import com.spin.transaction.dto.ProviderResponse;
 import com.spin.transaction.entity.Transaction;
 import com.spin.transaction.exception.ProviderException;
 import com.spin.transaction.exception.ResourceNotFoundException;
+import com.spin.transaction.mapper.ProviderMapper;
+import com.spin.transaction.mapper.TransactionMapper;
 import com.spin.transaction.numbregeneratorservice.TransactionStatus;
 import com.spin.transaction.dto.TransactionRequest;
 import com.spin.transaction.dto.TransactionResponse;
@@ -24,10 +25,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.data.jpa.domain.Specification;
 
 @Service
 public class TransactionService implements  ITransactionServices{
+
+    private static final Logger log =
+            LoggerFactory.getLogger(TransactionService.class);
 
     private final BusinessRulesValidator validator;
     private final ProviderClient providerClient;
@@ -43,8 +50,10 @@ public class TransactionService implements  ITransactionServices{
     @Override
     public TransactionResponse create(TransactionRequest transactionRequest) {
 
+        log.info("Iniciando validación de negocio accountId: {}", transactionRequest.getAccountId());
         validator.validate(transactionRequest);
 
+        log.info("Iniciando creación de Transaction accountId: {}", transactionRequest.getAccountId());
         Transaction transaction = new Transaction();
         transaction.setAccountId(transactionRequest.getAccountId());
         transaction.setType(transactionRequest.getType());
@@ -55,38 +64,28 @@ public class TransactionService implements  ITransactionServices{
 
         try{
 
-            ProviderRequest providerRequest = new ProviderRequest();
-            providerRequest.setAccountId(transactionRequest.getAccountId());
-            providerRequest.setType(transactionRequest.getType());
-            providerRequest.setAmount(transactionRequest.getAmount());
-
-            ProviderResponse providerResponse = providerClient.execute(providerRequest);
+            log.info("Iniciando llamado de proveedor accountId: : {}", transactionRequest.getAccountId());
+            ProviderResponse providerResponse = providerClient.execute(ProviderMapper.
+                    INSTANCE.transactionRequestToProviderRequest(transactionRequest));
+            log.info("Finaliza llamado de proveedor accountId: : {}", providerResponse.getTransactionId());
 
             transaction.setStatus(providerResponse.getStatus());
             transaction.setProviderTransactionId(providerResponse.getTransactionId());
             transaction.setBalanceAfter(providerResponse.getBalance());
 
         }catch (ProviderException ex){
+
             transaction.setStatus(TransactionStatus.REJECTED);
             transaction.setProviderTransactionId(null);
             transaction.setBalanceAfter(null);
         }
 
+        log.info("Iniciando persistencia de transacción accountId: : {}", transactionRequest.getAccountId());
         Transaction transactionSaved = transactionRepository.save(transaction);
+        log.info("Finaliza persistencia de transacción id: : {}", transactionSaved.getId());
 
-        TransactionResponse response = new TransactionResponse();
-        response.setId(transactionSaved.getId());
-        response.setAccountId(transactionSaved.getAccountId());
-        response.setType(transactionSaved.getType());
-        response.setAmount(transactionSaved.getAmount());
-        response.setCurrency(transactionSaved.getCurrency());
-        response.setDescription(transactionSaved.getDescription());
-        response.setStatus(transactionSaved.getStatus());
-        response.setProviderTransactionId(transactionSaved.getProviderTransactionId());
-        response.setBalanceAfter(transactionSaved.getBalanceAfter());
-        response.setCreatedAt(transactionSaved.getCreatedAt());
-
-        return  response;
+        return TransactionMapper.
+                INSTANCE.transactionToTransactionResponse(transactionSaved);
     }
 
     @Override
@@ -95,44 +94,20 @@ public class TransactionService implements  ITransactionServices{
        List<Transaction> transactionList =
                transactionRepository.findAll();
 
-        return transactionList
-                 .stream()
-                 .map(transaction -> TransactionResponse.builder()
-                         .id(transaction.getId())
-                         .accountId(transaction.getAccountId())
-                         .type(transaction.getType())
-                         .amount(transaction.getAmount())
-                         .currency(transaction.getCurrency())
-                         .description(transaction.getDescription())
-                         .status(transaction.getStatus())
-                         .providerTransactionId(transaction.getProviderTransactionId())
-                         .balanceAfter(transaction.getBalanceAfter())
-                         .createdAt(transaction.getCreatedAt())
-                         .build()).
-                 toList();
+       return TransactionMapper.
+                INSTANCE.transactionList(transactionList);
+
     }
 
     @Override
     public TransactionResponse findTransactionById(UUID id) {
 
         Transaction transaction = transactionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Transaction not found: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException("Transaction not found: " + id));
 
-        return TransactionResponse
-              .builder()
-                  .id(transaction.getId())
-                  .accountId(transaction.getAccountId())
-                  .type(transaction.getType())
-                  .amount(transaction.getAmount())
-                  .currency(transaction.getCurrency())
-                  .description(transaction.getDescription())
-                  .status(transaction.getStatus())
-                  .providerTransactionId(transaction.getProviderTransactionId())
-                  .balanceAfter(transaction.getBalanceAfter())
-                  .createdAt(transaction.getCreatedAt())
-              .build();
-        }
-
+         return TransactionMapper.
+            INSTANCE.transactionToTransactionResponse(transaction);
+    }
 
     @Override
     public PageResponse<TransactionResponse> findTransactions(
@@ -142,18 +117,19 @@ public class TransactionService implements  ITransactionServices{
             int page,
             int limit
     ) {
-
+        log.info("Iniciando consulta de transacción accountId: {}", accountId);
         Pageable pageable = PageRequest.of(page, limit, Sort.by("createdAt").descending());
 
+        log.info("Construcción de consulta por filtro accountId: {}", accountId);
         Specification<Transaction> spec =
                 TransactionSpecification.filter(accountId, status, type);
 
+        log.info("Obtención de transacción por filtro y paginación accountId: {}", accountId);
         Page<Transaction> transactions =
                 transactionRepository.findAll(spec, pageable);
 
-        List<TransactionResponse> data = transactions
-                .map(this::mapToResponse)
-                .getContent();
+        List<TransactionResponse> data = TransactionMapper.INSTANCE
+                .transactionList(transactions.getContent());
 
         Meta meta = new Meta(
                 page,
@@ -161,22 +137,7 @@ public class TransactionService implements  ITransactionServices{
                 transactions.getTotalElements()
         );
 
+        log.info("Finalizando consulta de transacción accountId: {}", accountId);
         return new PageResponse<>(data, meta);
-    }
-
-    private TransactionResponse mapToResponse(Transaction transaction) {
-
-        return TransactionResponse.builder()
-                .id(transaction.getId())
-                .accountId(transaction.getAccountId())
-                .type(transaction.getType())
-                .amount(transaction.getAmount())
-                .currency(transaction.getCurrency())
-                .description(transaction.getDescription())
-                .status(transaction.getStatus())
-                .providerTransactionId(transaction.getProviderTransactionId())
-                .balanceAfter(transaction.getBalanceAfter())
-                .createdAt(transaction.getCreatedAt())
-                .build();
     }
 }
