@@ -76,26 +76,18 @@
 			<version>5.3.1</version>
 		</dependency>
 
-		<!-- Model Mapper -->
-		<dependency>
-			<groupId>org.modelmapper</groupId>
-			<artifactId>modelmapper</artifactId>
-			<version>3.0.0</version>
-		</dependency>
-
-		<!-- Map Struct -->
-		<!-- Dependencia de MapStruct -->
+		<!-- MapStruct -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
-			<version>1.5.5.Final</version> <!-- O la última versión estable -->
+			<version>1.5.5.Final</version>
 		</dependency>
 
-		<!-- Procesador de anotaciones para MapStruct -->
+		<!-- MapStruct processor -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct-processor</artifactId>
-			<version>1.5.5.Final</version> <!-- Asegúrate de usar la misma versión -->
+			<version>1.5.5.Final</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -123,6 +115,11 @@
 									<groupId>org.projectlombok</groupId>
 									<artifactId>lombok</artifactId>
 								</path>
+								<path>
+									<groupId>org.mapstruct</groupId>
+									<artifactId>mapstruct-processor</artifactId>
+									<version>1.5.5.Final</version>
+								</path>
 							</annotationProcessorPaths>
 						</configuration>
 					</execution>
@@ -137,6 +134,11 @@
 								<path>
 									<groupId>org.projectlombok</groupId>
 									<artifactId>lombok</artifactId>
+								</path>
+								<path>
+									<groupId>org.mapstruct</groupId>
+									<artifactId>mapstruct-processor</artifactId>
+									<version>1.5.5.Final</version>
 								</path>
 							</annotationProcessorPaths>
 						</configuration>
