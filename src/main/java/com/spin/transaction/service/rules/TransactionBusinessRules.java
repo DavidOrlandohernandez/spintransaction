@@ -1,17 +1,16 @@
-package com.spin.transaction.service;
+package com.spin.transaction.service.rules;
 
-import com.spin.transaction.exception.BusinessRuleException;
-import com.spin.transaction.exception.DebitLimitExceededException;
-import com.spin.transaction.exception.InvalidAmountException;
-import com.spin.transaction.exception.UnsupportedCurrencyException;
-import com.spin.transaction.numbregeneratorservice.TransactionType;
-import com.spin.transaction.dto.TransactionRequest;
+import com.spin.transaction.exception.exceptionrules.DebitLimitExceededException;
+import com.spin.transaction.exception.exceptionrules.InvalidAmountException;
+import com.spin.transaction.exception.exceptionrules.UnsupportedCurrencyException;
+import com.spin.transaction.enums.TransactionType;
+import com.spin.transaction.dto.transaction.TransactionRequest;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @Service
-public class BusinessRulesValidator {
+public class TransactionBusinessRules {
     public void validate(TransactionRequest request) {
 
         if (request.getAmount().compareTo(new BigDecimal("1.00")) <= 0) {

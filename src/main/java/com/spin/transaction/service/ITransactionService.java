@@ -1,15 +1,15 @@
 package com.spin.transaction.service;
 
-import com.spin.transaction.dto.TransactionRequest;
-import com.spin.transaction.dto.TransactionResponse;
-import com.spin.transaction.numbregeneratorservice.TransactionStatus;
-import com.spin.transaction.numbregeneratorservice.TransactionType;
+import com.spin.transaction.dto.transaction.TransactionRequest;
+import com.spin.transaction.dto.transaction.TransactionResponse;
+import com.spin.transaction.enums.TransactionStatus;
+import com.spin.transaction.enums.TransactionType;
 import com.spin.transaction.wraper.PageResponse;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface ITransactionServices {
+public interface ITransactionService {
 
     public TransactionResponse create(TransactionRequest transactionRequest);
 

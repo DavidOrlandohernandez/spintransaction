@@ -1,4 +1,4 @@
-package com.spin.transaction.numbregeneratorservice;
+package com.spin.transaction.enums;
 
 public enum TransactionType {
     CREDIT,

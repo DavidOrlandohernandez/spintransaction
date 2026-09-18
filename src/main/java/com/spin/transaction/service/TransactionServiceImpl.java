@@ -1,47 +1,49 @@
 package com.spin.transaction.service;
 
-import com.spin.transaction.client.ProviderClient;
-import com.spin.transaction.dto.ProviderResponse;
-import com.spin.transaction.entity.Transaction;
-import com.spin.transaction.exception.ProviderException;
-import com.spin.transaction.exception.ResourceNotFoundException;
-import com.spin.transaction.mapper.ProviderMapper;
-import com.spin.transaction.mapper.TransactionMapper;
-import com.spin.transaction.numbregeneratorservice.TransactionStatus;
-import com.spin.transaction.dto.TransactionRequest;
-import com.spin.transaction.dto.TransactionResponse;
-import com.spin.transaction.numbregeneratorservice.TransactionType;
-import com.spin.transaction.repository.TransactionRepository;
-import com.spin.transaction.specification.TransactionSpecification;
-import com.spin.transaction.wraper.Meta;
-import com.spin.transaction.wraper.PageResponse;
-import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.data.jpa.domain.Specification;
 
+
+import com.spin.transaction.client.ProviderClient;
+import com.spin.transaction.dto.provider.ProviderResponse;
+import com.spin.transaction.dto.transaction.TransactionRequest;
+import com.spin.transaction.dto.transaction.TransactionResponse;
+import com.spin.transaction.entity.Transaction;
+import com.spin.transaction.exception.ProviderException;
+import com.spin.transaction.exception.ResourceNotFoundException;
+import com.spin.transaction.mapper.provider.ProviderMapper;
+import com.spin.transaction.mapper.transaction.TransactionMapper;
+import com.spin.transaction.enums.TransactionStatus;
+import com.spin.transaction.enums.TransactionType;
+import com.spin.transaction.repository.TransactionRepository;
+import com.spin.transaction.service.rules.TransactionBusinessRules;
+import com.spin.transaction.specification.TransactionSpecification;
+import com.spin.transaction.wraper.Meta;
+import com.spin.transaction.wraper.PageResponse;
+
 @Service
-public class TransactionService implements  ITransactionServices{
+public class TransactionServiceImpl implements ITransactionService {
 
     private static final Logger log =
-            LoggerFactory.getLogger(TransactionService.class);
+            LoggerFactory.getLogger(TransactionServiceImpl.class);
 
-    private final BusinessRulesValidator validator;
+    private final TransactionBusinessRules validator;
     private final ProviderClient providerClient;
     private final TransactionRepository transactionRepository;
 
-    public TransactionService(BusinessRulesValidator validator, ProviderClient providerClient,
-                              TransactionRepository transactionRepository) {
+    public TransactionServiceImpl(TransactionBusinessRules validator, ProviderClient providerClient,
+                                  TransactionRepository transactionRepository) {
         this.validator = validator;
         this.providerClient = providerClient;
         this.transactionRepository = transactionRepository;

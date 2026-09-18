@@ -1,7 +1,7 @@
-package com.spin.transaction.mapper;
+package com.spin.transaction.mapper.provider;
 
-import com.spin.transaction.dto.ProviderRequest;
-import com.spin.transaction.dto.TransactionRequest;
+import com.spin.transaction.dto.provider.ProviderRequest;
+import com.spin.transaction.dto.transaction.TransactionRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;

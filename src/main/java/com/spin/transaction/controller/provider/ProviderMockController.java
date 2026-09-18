@@ -1,8 +1,8 @@
 package com.spin.transaction.controller.provider;
 
-import com.spin.transaction.dto.ProviderRequest;
-import com.spin.transaction.dto.ProviderResponse;
-import com.spin.transaction.numbregeneratorservice.TransactionStatus;
+import com.spin.transaction.dto.provider.ProviderRequest;
+import com.spin.transaction.dto.provider.ProviderResponse;
+import com.spin.transaction.enums.TransactionStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,6 +1,6 @@
-package com.spin.transaction.dto;
+package com.spin.transaction.dto.provider;
 
-import com.spin.transaction.numbregeneratorservice.TransactionStatus;
+import com.spin.transaction.enums.TransactionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

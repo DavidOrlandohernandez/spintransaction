@@ -1,6 +1,6 @@
-package com.spin.transaction.dto;
+package com.spin.transaction.dto.transaction;
 
-import com.spin.transaction.numbregeneratorservice.TransactionType;
+import com.spin.transaction.enums.TransactionType;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

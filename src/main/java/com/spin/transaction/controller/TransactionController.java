@@ -1,10 +1,10 @@
 package com.spin.transaction.controller;
 
-import com.spin.transaction.numbregeneratorservice.TransactionStatus;
-import com.spin.transaction.numbregeneratorservice.TransactionType;
-import com.spin.transaction.service.ITransactionServices;
-import com.spin.transaction.dto.TransactionRequest;
-import com.spin.transaction.dto.TransactionResponse;
+import com.spin.transaction.enums.TransactionStatus;
+import com.spin.transaction.enums.TransactionType;
+import com.spin.transaction.service.ITransactionService;
+import com.spin.transaction.dto.transaction.TransactionRequest;
+import com.spin.transaction.dto.transaction.TransactionResponse;
 import com.spin.transaction.wraper.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +33,11 @@ public class TransactionController {
     private static final Logger log =
             LoggerFactory.getLogger(TransactionController.class);
 
-    @Autowired
-    private ITransactionServices transactionServices;
+    private final ITransactionService transactionServices;
+
+    public TransactionController(ITransactionService transactionServices) {
+        this.transactionServices = transactionServices;
+    }
 
     @Operation(
             summary = "ALTA DE UNA TRANSACCIÓN / CREATE",
@@ -103,7 +105,8 @@ public class TransactionController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int limit
     ) {
-        log.info("GET /Transaction consulta paginada: {}", "accountId:" + accountId + "page:" + page + "lmit:" + limit);
+        log.info("GET /transactions filters accountId={}, status={}, type={}, page={}, limit={}",
+                accountId, status, type, page, limit);
 
         return ResponseEntity.ok(
                 transactionServices.findTransactions(accountId, status, type, page, limit)

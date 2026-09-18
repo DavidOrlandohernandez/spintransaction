@@ -1,6 +1,6 @@
-package com.spin.transaction.mapper;
+package com.spin.transaction.mapper.transaction;
 
-import com.spin.transaction.dto.TransactionResponse;
+import com.spin.transaction.dto.transaction.TransactionResponse;
 import com.spin.transaction.entity.Transaction;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;

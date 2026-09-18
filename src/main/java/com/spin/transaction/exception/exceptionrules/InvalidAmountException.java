@@ -1,4 +1,4 @@
-package com.spin.transaction.exception;
+package com.spin.transaction.exception.exceptionrules;
 
 public class InvalidAmountException extends BusinessRuleException {
 

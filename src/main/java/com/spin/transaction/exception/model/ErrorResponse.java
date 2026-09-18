@@ -1,4 +1,4 @@
-package com.spin.transaction.exception;
+package com.spin.transaction.exception.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

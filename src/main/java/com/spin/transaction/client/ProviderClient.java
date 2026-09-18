@@ -1,8 +1,8 @@
 package com.spin.transaction.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spin.transaction.dto.ProviderRequest;
-import com.spin.transaction.dto.ProviderResponse;
+import com.spin.transaction.dto.provider.ProviderRequest;
+import com.spin.transaction.dto.provider.ProviderResponse;
 import com.spin.transaction.exception.ProviderException;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
-import com.spin.transaction.exception.ProviderErrorResponse;
+import com.spin.transaction.exception.model.ProviderErrorResponse;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

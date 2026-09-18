@@ -1,6 +1,11 @@
-package com.spin.transaction.exception;
+package com.spin.transaction.exception.handler;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.spin.transaction.exception.*;
+import com.spin.transaction.exception.exceptionrules.DebitLimitExceededException;
+import com.spin.transaction.exception.exceptionrules.InvalidAmountException;
+import com.spin.transaction.exception.exceptionrules.UnsupportedCurrencyException;
+import com.spin.transaction.exception.model.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;

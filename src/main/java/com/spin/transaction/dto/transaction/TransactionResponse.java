@@ -1,14 +1,13 @@
-package com.spin.transaction.dto;
+package com.spin.transaction.dto.transaction;
 
-import com.spin.transaction.numbregeneratorservice.TransactionStatus;
-import com.spin.transaction.numbregeneratorservice.TransactionType;
+import com.spin.transaction.enums.TransactionStatus;
+import com.spin.transaction.enums.TransactionType;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-@Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor

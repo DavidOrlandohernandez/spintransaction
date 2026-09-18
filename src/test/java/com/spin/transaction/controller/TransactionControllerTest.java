@@ -1,13 +1,13 @@
 package com.spin.transaction.controller;
 
-import com.spin.transaction.dto.TransactionRequest;
-import com.spin.transaction.dto.TransactionResponse;
+import com.spin.transaction.dto.transaction.TransactionRequest;
+import com.spin.transaction.dto.transaction.TransactionResponse;
 import com.spin.transaction.entity.Transaction;
-import com.spin.transaction.exception.ErrorResponse;
-import com.spin.transaction.numbregeneratorservice.TransactionStatus;
-import com.spin.transaction.numbregeneratorservice.TransactionType;
+import com.spin.transaction.exception.model.ErrorResponse;
+import com.spin.transaction.enums.TransactionStatus;
+import com.spin.transaction.enums.TransactionType;
 import com.spin.transaction.repository.TransactionRepository;
-import com.spin.transaction.service.TransactionService;
+import com.spin.transaction.service.TransactionServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -38,7 +37,7 @@ public class TransactionControllerTest {
     private TransactionRepository transactionRepository;
 
     @Autowired
-    private TransactionService transactionServices;
+    private TransactionServiceImpl transactionServices;
 
     @Test
     void createTransaction_TransactionStatusApproved() throws Exception {
@@ -50,7 +49,7 @@ public class TransactionControllerTest {
         request.setDescription("ESTA ES UNA PRUEBA DE SPRINGBOOTTEST");
         request.setType(TransactionType.CREDIT);
 
-        // 🔥 EJECUTA TODO EL FLUJO: Controller → Service → Repository → DB
+        //EJECUTA TODO EL FLUJO: Controller → Service → Repository → DB
         String responseJson = mockMvc.perform(post("/api/v1/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -60,11 +59,11 @@ public class TransactionControllerTest {
                 .getResponse()
                 .getContentAsString();
 
-        // 🔥 CONVIERTE RESPUESTA
+        //CONVIERTE RESPUESTA
         TransactionResponse response =
                 objectMapper.readValue(responseJson, TransactionResponse.class);
 
-        // 🔥 VERIFICACIÓN EN BD REAL
+        //VERIFICACIÓN EN BD REAL
         Transaction saved = transactionRepository.findById(response.getId())
                 .orElseThrow();
 
@@ -83,7 +82,7 @@ public class TransactionControllerTest {
         request.setDescription("ESTA ES UNA PRUEBA DE SPRINGBOOTTEST");
         request.setType(TransactionType.CREDIT);
 
-        // 🔥 EJECUTA TODO EL FLUJO: Controller → Service → Repository → DB
+        //EJECUTA TODO EL FLUJO: Controller → Service → Repository → DB
         String responseJson = mockMvc.perform(post("/api/v1/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -93,11 +92,11 @@ public class TransactionControllerTest {
                 .getResponse()
                 .getContentAsString();
 
-        // 🔥 CONVIERTE RESPUESTA
+        //CONVIERTE RESPUESTA
         TransactionResponse response =
                 objectMapper.readValue(responseJson, TransactionResponse.class);
 
-        // 🔥 VERIFICACIÓN EN BD REAL
+        //VERIFICACIÓN EN BD REAL
         Transaction saved = transactionRepository.findById(response.getId())
                 .orElseThrow();
 
@@ -116,7 +115,7 @@ public class TransactionControllerTest {
         request.setDescription("ESTA ES UNA PRUEBA DE SPRINGBOOTTEST");
         request.setType(TransactionType.CREDIT);
 
-        // 🔥 EJECUTA TODO EL FLUJO: Controller → Service → Repository → DB
+        //EJECUTA TODO EL FLUJO: Controller → Service → Repository → DB
         String responseJson = mockMvc.perform(post("/api/v1/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -126,7 +125,7 @@ public class TransactionControllerTest {
                 .getResponse()
                 .getContentAsString();
 
-        // 🔥 CONVIERTE RESPUESTA
+        //CONVIERTE RESPUESTA
         ErrorResponse errorResponse =
                 objectMapper.readValue(responseJson, ErrorResponse.class);
 
@@ -145,7 +144,7 @@ public class TransactionControllerTest {
         request.setDescription("ESTA ES UNA PRUEBA DE SPRINGBOOTTEST");
         request.setType(TransactionType.DEBIT);
 
-        // 🔥 EJECUTA TODO EL FLUJO: Controller → Service → Repository → DB
+        //EJECUTA TODO EL FLUJO: Controller → Service → Repository → DB
         String responseJson = mockMvc.perform(post("/api/v1/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -155,7 +154,7 @@ public class TransactionControllerTest {
                 .getResponse()
                 .getContentAsString();
 
-        // 🔥 CONVIERTE RESPUESTA
+        //CONVIERTE RESPUESTA
         ErrorResponse errorResponse =
                 objectMapper.readValue(responseJson, ErrorResponse.class);
 
@@ -174,7 +173,7 @@ public class TransactionControllerTest {
         request.setDescription("ESTA ES UNA PRUEBA DE SPRINGBOOTTEST");
         request.setType(TransactionType.DEBIT);
 
-        // 🔥 EJECUTA TODO EL FLUJO: Controller → Service → Repository → DB
+        //EJECUTA TODO EL FLUJO: Controller → Service → Repository → DB
         String responseJson = mockMvc.perform(post("/api/v1/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -184,7 +183,7 @@ public class TransactionControllerTest {
                 .getResponse()
                 .getContentAsString();
 
-        // 🔥 CONVIERTE RESPUESTA
+        //CONVIERTE RESPUESTA
         ErrorResponse errorResponse =
                 objectMapper.readValue(responseJson, ErrorResponse.class);
 
@@ -196,22 +195,7 @@ public class TransactionControllerTest {
     @Test
     void getTransactions_shouldReturnPaginatedResults() throws Exception {
 
-        // 🔥 INSERTAR DATOS DIRECTO EN DB (seed test)
-        /* Transaction t1 = new Transaction();
-        t1.setAccountId("acc-1");
-        t1.setAmount(new BigDecimal("100"));
-        t1.setType(TransactionType.CREDIT);
-        t1.setCurrency("MXN");
-
-        Transaction t2 = new Transaction();
-        t2.setAccountId("acc-1");
-        t2.setAmount(new BigDecimal("200"));
-        t2.setType(TransactionType.DEBIT);
-        t2.setCurrency("MXN");
-
-        transactionRepository.saveAll(List.of(t1, t2));*/
-
-        // 🔥 EJECUTA FLUJO COMPLETO (Controller → Service → Spec → DB)
+        //EJECUTA FLUJO COMPLETO (Controller → Service → Spec → DB)
         mockMvc.perform(get("/api/v1/transactions/")
                         .param("status", "APPROVED")
                         .param("page", "0")

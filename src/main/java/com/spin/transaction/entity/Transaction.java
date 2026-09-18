@@ -1,7 +1,7 @@
 package com.spin.transaction.entity;
 
-import com.spin.transaction.numbregeneratorservice.TransactionType;
-import com.spin.transaction.numbregeneratorservice.TransactionStatus;
+import com.spin.transaction.enums.TransactionType;
+import com.spin.transaction.enums.TransactionStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,13 +9,13 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-@AllArgsConstructor
-@NoArgsConstructor
+@Entity
+@Table(name = "transactions")
 @Getter
 @Setter
-@Entity
 @Builder
-@Table(name = "transactions")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Transaction {
 
     @Id
@@ -46,7 +46,11 @@ public class Transaction {
     @Column(precision = 19, scale = 2)
     private BigDecimal balanceAfter;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private OffsetDateTime createdAt;
 
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = OffsetDateTime.now();
+    }
 }

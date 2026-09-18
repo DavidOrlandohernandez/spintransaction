@@ -1,8 +1,8 @@
 package com.spin.transaction.specification;
 
 import com.spin.transaction.entity.Transaction;
-import com.spin.transaction.numbregeneratorservice.TransactionStatus;
-import com.spin.transaction.numbregeneratorservice.TransactionType;
+import com.spin.transaction.enums.TransactionStatus;
+import com.spin.transaction.enums.TransactionType;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
