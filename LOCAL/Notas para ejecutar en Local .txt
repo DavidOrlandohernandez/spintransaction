@@ -1,0 +1,13 @@
+1.- Instrucciones para ejecutar el proyecto:
+Requisitos minimos: 
+* Tener instalado y configurado version de Java 17.0.12 2024-07-16 LTS. 
+* Tener una instancia de SQL Server 17 o Superior.
+* Necesario Crear una bases de datos con el nombre: "localcredit".
+Ejemplo:  url: jdbc:postgresql://localhost:5432/localcredit
+
+2.- Modificar el application-dev.yaml Segun el puerto de exposición de la base de datos:
+
+3.- Abrir una linea de comando en la carpeta LOCAL que viene en el proyecto. 
+
+4.- Ejecutar el siguiente comando:
+java -jar app.jar --spring.profiles.active=prod

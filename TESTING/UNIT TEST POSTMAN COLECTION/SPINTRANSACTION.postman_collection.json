@@ -1,0 +1,161 @@
+{
+  "info": {
+    "_postman_id": "88662f58-75e7-4111-a0a4-8b6ffaead262",
+    "name": "SPINTRANSACTION",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "37161570"
+  },
+  "item": [
+    {
+      "name": "CREATE TRANSACTION - REGLAS DE NEGOCIO",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\"accountId\": \"acc-123456\",\r\n\"type\": \"CREDIT\",\r\n\"amount\": 10500.00,\r\n\"currency\": \"MXN\",\r\n\"description\": \"Transferencia recibida\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8085/api/v1/transactions",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8085",
+          "path": [
+            "api",
+            "v1",
+            "transactions"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "FIND ALL TRANSACTIONS - CONSULTA MASIVA",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8085/api/v1/transactions",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8085",
+          "path": [
+            "api",
+            "v1",
+            "transactions"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "FIND BY ID TRANSACTION - CONSUlTA POR ID",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8085/api/v1/transactions/de28ce17-1476-431a-a85e-0911247d556",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8085",
+          "path": [
+            "api",
+            "v1",
+            "transactions",
+            "de28ce17-1476-431a-a85e-0911247d556"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PAGE AND LIMIT TRANSACTION - CONSULTA POR PAGINACION",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8085/api/v1/transactions/?status=APPROVED&page=0&limit=10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8085",
+          "path": [
+            "api",
+            "v1",
+            "transactions",
+            ""
+          ],
+          "query": [
+            {
+              "key": "status",
+              "value": "APPROVED"
+            },
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "limit",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PROVIDER MOCK -  CONTROLLER DE PRUEBA",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n \"accountId\": \"acc-123456\",\r\n \"type\": \"DEBIT\",\r\n \"amount\": 2000.00,\r\n \"currency\": \"MXN\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8085/provider/v1/execute",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8085",
+          "path": [
+            "provider",
+            "v1",
+            "execute"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

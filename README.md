@@ -59,6 +59,7 @@ lo que lo convierte en una base confiable para construir servicios REST competit
 reales.
 
 
+
 2-. Instrucciones de compilación del proyecto:
 Tras descargar el proyecto y abrirlo en el IDE de su eleccion. 
 
@@ -66,16 +67,63 @@ Seguir los siguientes pasos para una compilación exitosa.
 
 Requisitos minimos: 
 * Tener instalado y configurado Maven.
-* Tener instalado y configurado version de 17.0.12 2024-07-16 LTS. 
+* Tener instalado y configurado version de Java 17.0.12 2024-07-16 LTS. 
 * Tener una instancia de SQL Server 17 o Superior. 
 
-1.- Colocarse en la ruta del proyecto. (Corresponder a su local)
+2.1- Colocarse en la ruta del proyecto. (Corresponder a su local)
 "PS C:\Users\e_dohernandez\Downloads\PRACTICAS DE GIT\spintransaction>"
 
-2.- Ejecutar los siguientes comandos en el siguiente orden. 
+2.2- Ejecutar los siguientes comandos en el siguiente orden. 
 * mvn clean
 * mvn compile
 * mvn install "En caso de tener problemas ejecutar el siguiente sin TEST"
 * mvn install -DskipTests
 * mvn package -DskipTests
 
+NOTA: Configurar su IDE de acuerdo a la tecnologias aqui descritas. 
+
+
+
+
+3.- Instrucciones para ejecutar el proyecto:
+Requisitos minimos: 
+* Tener instalado y configurado version de Java 17.0.12 2024-07-16 LTS. 
+* Tener una instancia de SQL Server 17 o Superior.
+* Necesario Crear una bases de datos con el nombre: "localcredit".
+Ejemplo:  url: jdbc:postgresql://localhost:5432/localcredit
+
+3.1- Modificar el application-dev.yaml Segun el puerto de exposición de la base de datos:
+
+3.2- Abrir una linea de comando en la carpeta LOCAL que viene en el proyecto. 
+
+3.3- Ejecutar el siguiente comando:
+java -jar app.jar --spring.profiles.active=prod
+
+
+
+
+3-. Desición de la estructura y arquitectura del proyecto:
+
+El proyecto está estructurado bajo una arquitectura en capas (Layered Architecture) 
+utilizando Spring Boot, con una separación clara de responsabilidades que permite 
+mantener un diseño modular, escalable y fácil de mantener. Se implementa un enfoque 
+RESTful donde la comunicación se realiza mediante DTOs, desacoplando el modelo de persistencia 
+(Entities) del modelo expuesto a la API. Además, se incorpora el uso de Specifications para 
+consultas dinámicas y un sistema de mapeo centralizado mediante Mappers.
+
+Representación de (Layered Architecture):
+
+com.spin.transaction
+├── SpinTransactionApplication.java
+├── client
+├── config
+├── controller
+├── dto
+├── entity
+├── enums
+├── exception
+├── mapper
+├── repository
+├── service
+├── specification
+└── wrapper
