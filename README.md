@@ -120,15 +120,15 @@ com.spin.transaction
 
 
 5.- COBERTURA DE IMPLEMENTACIÓN:
-Implementacion de spring initializr: Generación base del proyecto. 
-Implementación de Mock por medio de servicios: Se usó Un controller separado como Mock para la respuesta de proveedor. 
-Implementación de Jacoco: Documentación de la cobertura de pruebas. 
-Implementación de Swagger - OpenAPI Standar: Documentación de contratos y testing. 
-Implementación de pruebas con Junit y Mocks: Test automatizados. 
-Implementación de pruebas unitarias con Postman: Test unitarios. Se compartirá la colección. 
-Implementación de docker con DockerFile y Docker-Compose: Se genera imagen base para dockerizar manualmente y por compose. 
-Implementación de Mapstuct: Reducción de BoilerPlate.
-Implementación de Logs con slf4j.
+* Implementacion de spring initializr: Generación base del proyecto. 
+* Implementación de Mock por medio de servicios: Se usó Un controller separado como Mock para la respuesta de proveedor. 
+* Implementación de Jacoco: Documentación de la cobertura de pruebas. 
+* Implementación de Swagger - OpenAPI Standar: Documentación de contratos y testing. 
+* Implementación de pruebas con Junit y Mocks: Test automatizados. 
+* Implementación de pruebas unitarias con Postman: Test unitarios. Se compartirá la colección. 
+* Implementación de docker con DockerFile y Docker-Compose: Se genera imagen base para dockerizar manualmente y por compose. 
+* Implementación de Mapstuct: Reducción de BoilerPlate.
+* Implementación de Logs con slf4j.
 
 
 
