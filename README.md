@@ -32,33 +32,6 @@ Proyecto Spin By Oxxo proceseo de selección
 * Docker Desktop for Windows: Simulador de docker para uso local. 
 
 
-COBERTURA DE IMPEMENTACION:
-Implementacion de spring initializr: Generación base del proyecto. 
-Implementacion de Mock por medio de servicios: Se uso Un controller separado como Mock para la respuesta de proveedor. 
-Implementacion de Jacoco: Documentación de la covertura de pruebas. 
-Implementacion de Swagger - OpenAPI Standar: Documentacion de contratos y testing. 
-Implementacion de pruebas con Junit y Mocks: Test automatizadaos. 
-Implementacion de pruebas unitarias con Postman: Test unitarios. Se compartira coleccion. 
-Implementacion de docker con DockerFile y Docker-Compose: Se genera imgane base para dockerizar manualmente y por compose. 
-Implementacion de Mapstuct: Reducción de BoilerPlate.
-Implementacion de Logs con slf4j.
-
-
-
-El proyecto está construido sobre un stack moderno basado en Java 17 LTS y Spring Boot, lo que garantiza estabilidad, 
-rendimiento y soporte a largo plazo. El uso de Maven como gestor de dependencias permite mantener un control ordenado 
-del ciclo de vida del proyecto, mientras que PostgreSQL 17 aporta una base de datos robusta y confiable para entornos 
-productivos.
-La elección de Spring Boot como framework principal facilita el desarrollo de servicios REST escalables y bien estructurados, 
-reduciendo la complejidad de configuración y acelerando la entrega de funcionalidades. Complementado con Spring Data JPA, 
-se simplifica el acceso a datos, permitiendo una integración eficiente con la base de datos. Además, herramientas como Lombok 
-optimizan la productividad al reducir código repetitivo, y DevTools mejora la experiencia de desarrollo con recarga automática.
-El uso de YAML para la configuración aporta mayor claridad y organización en comparación con formatos tradicionales.
-En conjunto, este stack tecnológico ofrece un equilibrio sólido entre productividad, mantenibilidad y escalabilidad, 
-lo que lo convierte en una base confiable para construir servicios REST competitivos y preparados para entornos empresariales 
-reales.
-
-
 
 2-. Instrucciones de compilación del proyecto:
 Tras descargar el proyecto y abrirlo en el IDE de su eleccion. 
@@ -69,11 +42,15 @@ Requisitos minimos:
 * Tener instalado y configurado Maven.
 * Tener instalado y configurado version de Java 17.0.12 2024-07-16 LTS. 
 * Tener una instancia de SQL Server 17 o Superior. 
+* Necesario Crear una bases de datos con el nombre: "localcredit".
 
-2.1- Colocarse en la ruta del proyecto. (Corresponder a su local)
+2.1- Modificar el application-dev.yaml Segun el puerto de exposición de la base de datos:
+Ejemplo:  url: jdbc:postgresql://localhost:5432/localcredit
+
+3.2- Colocarse en la ruta del proyecto. (Corresponder a su local)
 "PS C:\Users\e_dohernandez\Downloads\PRACTICAS DE GIT\spintransaction>"
 
-2.2- Ejecutar los siguientes comandos en el siguiente orden. 
+3.3- Ejecutar los siguientes comandos en el siguiente orden. 
 * mvn clean
 * mvn compile
 * mvn install "En caso de tener problemas ejecutar el siguiente sin TEST"
@@ -90,9 +67,9 @@ Requisitos minimos:
 * Tener instalado y configurado version de Java 17.0.12 2024-07-16 LTS. 
 * Tener una instancia de SQL Server 17 o Superior.
 * Necesario Crear una bases de datos con el nombre: "localcredit".
-Ejemplo:  url: jdbc:postgresql://localhost:5432/localcredit
 
 3.1- Modificar el application-dev.yaml Segun el puerto de exposición de la base de datos:
+Ejemplo:  url: jdbc:postgresql://localhost:5432/localcredit
 
 3.2- Abrir una linea de comando en la carpeta LOCAL que viene en el proyecto. 
 
@@ -102,7 +79,7 @@ java -jar app.jar --spring.profiles.active=prod
 
 
 
-3-. Desición de la estructura y arquitectura del proyecto:
+4- Desición de la estructura y arquitectura del proyecto:
 
 El proyecto está estructurado bajo una arquitectura en capas (Layered Architecture) 
 utilizando Spring Boot, con una separación clara de responsabilidades que permite 
@@ -111,7 +88,7 @@ RESTful donde la comunicación se realiza mediante DTOs, desacoplando el modelo 
 (Entities) del modelo expuesto a la API. Además, se incorpora el uso de Specifications para 
 consultas dinámicas y un sistema de mapeo centralizado mediante Mappers.
 
-Representación de (Layered Architecture):
+4.1- Representación de (Layered Architecture):
 
 com.spin.transaction
 ├── SpinTransactionApplication.java
@@ -127,3 +104,44 @@ com.spin.transaction
 ├── service
 ├── specification
 └── wrapper
+
+
+5.- COBERTURA DE IMPEMENTACION:
+Implementacion de spring initializr: Generación base del proyecto. 
+Implementacion de Mock por medio de servicios: Se uso Un controller separado como Mock para la respuesta de proveedor. 
+Implementacion de Jacoco: Documentación de la covertura de pruebas. 
+Implementacion de Swagger - OpenAPI Standar: Documentacion de contratos y testing. 
+Implementacion de pruebas con Junit y Mocks: Test automatizadaos. 
+Implementacion de pruebas unitarias con Postman: Test unitarios. Se compartira coleccion. 
+Implementacion de docker con DockerFile y Docker-Compose: Se genera imgane base para dockerizar manualmente y por compose. 
+Implementacion de Mapstuct: Reducción de BoilerPlate.
+Implementacion de Logs con slf4j.
+
+
+
+6.- CONCLUCIONES FINALES
+El proyecto está construido sobre un stack moderno basado en Java 17 LTS y Spring Boot, lo que garantiza estabilidad, 
+rendimiento y soporte a largo plazo. El uso de Maven como gestor de dependencias permite mantener un control ordenado 
+del ciclo de vida del proyecto, mientras que PostgreSQL 17 aporta una base de datos robusta y confiable para entornos 
+productivos.
+La elección de Spring Boot como framework principal facilita el desarrollo de servicios REST escalables y bien estructurados, 
+reduciendo la complejidad de configuración y acelerando la entrega de funcionalidades. Complementado con Spring Data JPA, 
+se simplifica el acceso a datos, permitiendo una integración eficiente con la base de datos. Además, herramientas como Lombok 
+optimizan la productividad al reducir código repetitivo, y DevTools mejora la experiencia de desarrollo con recarga automática.
+El uso de YAML para la configuración aporta mayor claridad y organización en comparación con formatos tradicionales.
+En conjunto, este stack tecnológico ofrece un equilibrio sólido entre productividad, mantenibilidad y escalabilidad, 
+lo que lo convierte en una base confiable para construir servicios REST competitivos y preparados para entornos empresariales 
+reales.
+
+
+:::Si llegaste hasta aca te agredesco mucho tu atención espero sea de su agrado este pequeño proyecto.:::
+
+No se utilizo IA generativa para este proyecto. Mas bien si use IA pero como 
+consultor de dudas e implementación de algunas partes del proyecto. 
+cada parte del codigo se realizo paso a paso.  Comit por comit. 
+IA utilizada: ChatGPT basada en el modelo GPT-5.6-mini.
+Apoyos significativos de la IA:
+
+¨* En la generación del GET para la paginación. Interesante uso specification
+* Pruebas con SpringBootTest y Junit.
+* Algunas dudas sobre el menajeo de excepciones agrupadas. 
