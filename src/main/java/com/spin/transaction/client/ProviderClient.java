@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component
-public class ProviderClient {
+public class ProviderClient  implements TransactionExecutor{
 
     @Value("${provider.url}")
     private String providerUrl;
@@ -33,6 +33,7 @@ public class ProviderClient {
         this.restTemplate = new RestTemplate(factory);
     }
 
+    @Override
     public ProviderResponse execute(ProviderRequest request) {
 
         String url = providerUrl;

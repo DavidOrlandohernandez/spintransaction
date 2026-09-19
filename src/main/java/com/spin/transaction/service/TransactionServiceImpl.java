@@ -1,9 +1,11 @@
 package com.spin.transaction.service;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import com.spin.transaction.client.TransactionExecutor;
+import com.spin.transaction.domain.model.TransactionDomain;
+import com.spin.transaction.mapper.transaction.TransactionDomainMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +16,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
-
-import com.spin.transaction.client.ProviderClient;
 import com.spin.transaction.dto.provider.ProviderResponse;
 import com.spin.transaction.dto.transaction.TransactionRequest;
 import com.spin.transaction.dto.transaction.TransactionResponse;
@@ -27,7 +27,6 @@ import com.spin.transaction.mapper.transaction.TransactionMapper;
 import com.spin.transaction.enums.TransactionStatus;
 import com.spin.transaction.enums.TransactionType;
 import com.spin.transaction.repository.TransactionRepository;
-import com.spin.transaction.service.rules.TransactionBusinessRules;
 import com.spin.transaction.specification.TransactionSpecification;
 import com.spin.transaction.wraper.Meta;
 import com.spin.transaction.wraper.PageResponse;
@@ -38,56 +37,53 @@ public class TransactionServiceImpl implements ITransactionService {
     private static final Logger log =
             LoggerFactory.getLogger(TransactionServiceImpl.class);
 
-    private final TransactionBusinessRules validator;
-    private final ProviderClient providerClient;
+    private final TransactionExecutor transactionExecutor;
     private final TransactionRepository transactionRepository;
 
-    public TransactionServiceImpl(TransactionBusinessRules validator, ProviderClient providerClient,
+    public TransactionServiceImpl(TransactionExecutor transactionExecutor,
                                   TransactionRepository transactionRepository) {
-        this.validator = validator;
-        this.providerClient = providerClient;
+        this.transactionExecutor = transactionExecutor;
         this.transactionRepository = transactionRepository;
     }
 
     @Override
-    public TransactionResponse create(TransactionRequest transactionRequest) {
+    public TransactionResponse create(TransactionRequest request) {
 
-        log.info("Iniciando validación de negocio accountId: {}", transactionRequest.getAccountId());
-        validator.validate(transactionRequest);
+        log.info("Validando request accountId: {}", request.getAccountId());
+        TransactionDomain domain = new TransactionDomain(
+                request.getAccountId(),
+                request.getType(),
+                request.getAmount(),
+                request.getCurrency(),
+                request.getDescription()
+        );
 
-        log.info("Iniciando creación de Transaction accountId: {}", transactionRequest.getAccountId());
-        Transaction transaction = new Transaction();
-        transaction.setAccountId(transactionRequest.getAccountId());
-        transaction.setType(transactionRequest.getType());
-        transaction.setAmount(transactionRequest.getAmount());
-        transaction.setCurrency(transactionRequest.getCurrency());
-        transaction.setDescription(transactionRequest.getDescription());
-        transaction.setCreatedAt(OffsetDateTime.now());
+        domain.applyBusinessRules();
 
-        try{
+        try {
 
-            log.info("Iniciando llamado de proveedor accountId: : {}", transactionRequest.getAccountId());
-            ProviderResponse providerResponse = providerClient.execute(ProviderMapper.
-                    INSTANCE.transactionRequestToProviderRequest(transactionRequest));
-            log.info("Finaliza llamado de proveedor accountId: : {}", providerResponse.getTransactionId());
+            log.info("Llamando proveedor accountId: {}", request.getAccountId());
+            ProviderResponse response = transactionExecutor.execute(
+                    ProviderMapper.INSTANCE.transactionRequestToProviderRequest(request)
+            );
 
-            transaction.setStatus(providerResponse.getStatus());
-            transaction.setProviderTransactionId(providerResponse.getTransactionId());
-            transaction.setBalanceAfter(providerResponse.getBalance());
+            log.warn("Proveedor acepto transacción accountId: {}", request.getAccountId());
+            domain.markAsExecuted(
+                    response.getTransactionId(),
+                    response.getBalance()
+            );
 
-        }catch (ProviderException ex){
-
-            transaction.setStatus(TransactionStatus.REJECTED);
-            transaction.setProviderTransactionId(null);
-            transaction.setBalanceAfter(null);
+        } catch (ProviderException ex) {
+            log.warn("Proveedor rechazó transacción accountId: {}", request.getAccountId());
+            domain.markAsRejected();
         }
 
-        log.info("Iniciando persistencia de transacción accountId: : {}", transactionRequest.getAccountId());
-        Transaction transactionSaved = transactionRepository.save(transaction);
-        log.info("Finaliza persistencia de transacción id: : {}", transactionSaved.getId());
+        Transaction entity = TransactionDomainMapper.INSTANCE.transactionDomainToTransaction(domain);
 
-        return TransactionMapper.
-                INSTANCE.transactionToTransactionResponse(transactionSaved);
+        log.info("Persistiendo transacción accountId: {}", request.getAccountId());
+        Transaction saved = transactionRepository.save(entity);
+
+        return TransactionMapper.INSTANCE.transactionToTransactionResponse(saved);
     }
 
     @Override
