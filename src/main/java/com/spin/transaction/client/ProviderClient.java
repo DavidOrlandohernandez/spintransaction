@@ -14,7 +14,7 @@ import com.spin.transaction.exception.model.ProviderErrorResponse;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 @Component
 public class ProviderClient  implements TransactionExecutor{
 
@@ -33,6 +33,7 @@ public class ProviderClient  implements TransactionExecutor{
         this.restTemplate = new RestTemplate(factory);
     }
 
+    @CircuitBreaker(name = "providerService", fallbackMethod = "fallback")
     @Override
     public ProviderResponse execute(ProviderRequest request) {
 
@@ -72,5 +73,16 @@ public class ProviderClient  implements TransactionExecutor{
                 );
             }
         }
+    }
+
+    public ProviderResponse fallback(ProviderRequest request, Throwable ex) {
+
+        log.error("Provider falló: {}", ex.getMessage());
+
+        throw new ProviderException(
+                "400",
+                "UNKNOWN_ERROR",
+                "Error calling provider"
+        );
     }
 }

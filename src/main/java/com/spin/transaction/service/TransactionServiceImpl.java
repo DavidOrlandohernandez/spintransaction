@@ -30,6 +30,7 @@ import com.spin.transaction.repository.TransactionRepository;
 import com.spin.transaction.specification.TransactionSpecification;
 import com.spin.transaction.wraper.Meta;
 import com.spin.transaction.wraper.PageResponse;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @Service
 public class TransactionServiceImpl implements ITransactionService {
@@ -69,6 +70,7 @@ public class TransactionServiceImpl implements ITransactionService {
 
             log.warn("Proveedor acepto transacción accountId: {}", request.getAccountId());
             domain.markAsExecuted(
+                    response.getStatus(),
                     response.getTransactionId(),
                     response.getBalance()
             );

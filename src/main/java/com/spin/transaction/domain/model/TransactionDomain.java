@@ -46,8 +46,8 @@ public class TransactionDomain {
         }
     }
 
-    public void markAsExecuted(String providerId, BigDecimal balance) {
-        this.status = TransactionStatus.APPROVED;
+    public void markAsExecuted(TransactionStatus status, String providerId, BigDecimal balance) {
+        this.status = status;
         this.providerTransactionId = providerId;
         this.balanceAfter = balance;
     }
