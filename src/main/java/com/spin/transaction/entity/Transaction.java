@@ -53,4 +53,7 @@ public class Transaction {
     public void prePersist() {
         this.createdAt = OffsetDateTime.now();
     }
+
+    @Column(unique = true)
+    private String idempotencyKey;
 }

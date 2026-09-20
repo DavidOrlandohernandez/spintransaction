@@ -32,6 +32,7 @@ public class TransactionDomain {
     }
 
     public void applyBusinessRules() {
+
         if (amount.compareTo(new BigDecimal("1.00")) <= 0) {
             throw new InvalidAmountException("Amount must be greater than $1.00");
         }
@@ -44,6 +45,8 @@ public class TransactionDomain {
         if (!"MXN".equalsIgnoreCase(currency)) {
             throw new UnsupportedCurrencyException("Only MXN currency is supported");
         }
+
+
     }
 
     public void markAsExecuted(TransactionStatus status, String providerId, BigDecimal balance) {

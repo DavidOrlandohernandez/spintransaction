@@ -23,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -52,6 +53,7 @@ public class TransactionControllerTest {
         //EJECUTA TODO EL FLUJO: Controller → Service → Repository → DB
         String responseJson = mockMvc.perform(post("/api/v1/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Idempotency-Key", UUID.randomUUID())
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.accountId").value("acc-123"))
@@ -85,6 +87,7 @@ public class TransactionControllerTest {
         //EJECUTA TODO EL FLUJO: Controller → Service → Repository → DB
         String responseJson = mockMvc.perform(post("/api/v1/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Idempotency-Key", UUID.randomUUID())
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.accountId").value("acc-123"))
@@ -118,6 +121,7 @@ public class TransactionControllerTest {
         //EJECUTA TODO EL FLUJO: Controller → Service → Repository → DB
         String responseJson = mockMvc.perform(post("/api/v1/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Idempotency-Key", UUID.randomUUID())
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error").value("UNSUPPORTED_CURRENCY"))
@@ -147,6 +151,7 @@ public class TransactionControllerTest {
         //EJECUTA TODO EL FLUJO: Controller → Service → Repository → DB
         String responseJson = mockMvc.perform(post("/api/v1/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Idempotency-Key", UUID.randomUUID())
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error").value("DEBIT_LIMIT_EXCEEDED"))
@@ -176,6 +181,7 @@ public class TransactionControllerTest {
         //EJECUTA TODO EL FLUJO: Controller → Service → Repository → DB
         String responseJson = mockMvc.perform(post("/api/v1/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Idempotency-Key", UUID.randomUUID())
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error").value("INVALID_AMOUNT"))

@@ -1,10 +1,12 @@
 package com.spin.transaction.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.spin.transaction.client.TransactionExecutor;
 import com.spin.transaction.domain.model.TransactionDomain;
+import com.spin.transaction.exception.NotIdempotencyException;
 import com.spin.transaction.mapper.transaction.TransactionDomainMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +49,7 @@ public class TransactionServiceImpl implements ITransactionService {
     }
 
     @Override
-    public TransactionResponse create(TransactionRequest request) {
+    public TransactionResponse create(TransactionRequest request,String idempotencyKey) {
 
         log.info("Validando request accountId: {}", request.getAccountId());
         TransactionDomain domain = new TransactionDomain(
@@ -59,6 +61,18 @@ public class TransactionServiceImpl implements ITransactionService {
         );
 
         domain.applyBusinessRules();
+
+        if (idempotencyKey == null || idempotencyKey.isBlank()) {
+            throw new NotIdempotencyException("Idempotency-Key is required");
+        }
+
+        Optional<Transaction> existing =
+                transactionRepository.findByIdempotencyKey(idempotencyKey);
+
+        if (existing.isPresent()) {
+            log.info("Transacción duplicada, devolviendo resultado previo");
+            return TransactionMapper.INSTANCE.transactionToTransactionResponse(existing.get());
+        }
 
         try {
 
@@ -82,6 +96,7 @@ public class TransactionServiceImpl implements ITransactionService {
         Transaction entity = TransactionDomainMapper.INSTANCE.transactionDomainToTransaction(domain);
 
         log.info("Persistiendo transacción accountId: {}", request.getAccountId());
+        entity.setIdempotencyKey(idempotencyKey);
         Transaction saved = transactionRepository.save(entity);
 
         return TransactionMapper.INSTANCE.transactionToTransactionResponse(saved);

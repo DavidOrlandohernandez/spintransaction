@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public interface ITransactionService {
 
-    public TransactionResponse create(TransactionRequest transactionRequest);
+    public TransactionResponse create(TransactionRequest transactionRequest, String idempotencyKey);
 
     List<TransactionResponse> findAll();
 

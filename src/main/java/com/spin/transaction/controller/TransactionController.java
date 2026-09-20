@@ -64,10 +64,11 @@ public class TransactionController {
     )
     @PostMapping
     public ResponseEntity<TransactionResponse> create(
+            @RequestHeader("Idempotency-Key") String idempotencyKey,
             @Valid @RequestBody TransactionRequest transactionRequest) {
 
         log.info("POST /Transaction recibido: {}", transactionRequest);
-        TransactionResponse response = transactionServices.create(transactionRequest);
+        TransactionResponse response = transactionServices.create(transactionRequest,idempotencyKey);
         log.info("POST /Transaction response generado: {}", response);
 
         return ResponseEntity

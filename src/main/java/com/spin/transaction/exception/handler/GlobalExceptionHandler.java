@@ -56,6 +56,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
+    @ExceptionHandler(NotIdempotencyException.class)
+    public ResponseEntity<ErrorResponse> handleCurrency(NotIdempotencyException ex) {
+
+        ErrorResponse response = new ErrorResponse(
+                "NOT_IDEMPOTENCY_CURRENT",
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                OffsetDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
     // fallback general
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
