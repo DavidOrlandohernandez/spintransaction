@@ -168,6 +168,13 @@ La elección de Spring Boot facilita el desarrollo de servicios REST escalables 
 En conjunto, este stack ofrece un equilibrio sólido entre productividad, mantenibilidad y escalabilidad, convirtiéndolo en una base confiable para servicios REST de nivel empresarial.
 
 ---
+## 📝 8. UPDATE
+- Desacoplamiento del dominio con la entidad: Service orquesta la implementación de la logica.
+- Cambio de Servlete: Quitamos removi TOMCAT y implemente JETTY
+- Implementación de CircuitBreaker: Patron de reciliencia a fallos. 
+- Pool de conexiones: Mejora en la configuración de Hikari. Concurrencia. 
+- Implementación de Idempotencia: Evitar duplicidad de registro en la transaccion. 
+---
 
 > 🤝 *Si llegaste hasta aquí, agradezco mucho tu atención y tiempo dedicado a la revisión. ¡Espero que este proyecto sea de tu agrado!*
 
