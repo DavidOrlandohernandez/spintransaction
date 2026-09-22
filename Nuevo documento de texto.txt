@@ -1,0 +1,134 @@
+NUEVAS NOTAS ORDERNAR BIEN 
+Perfecto, esto te va a servir mucho para aterrizar tu diseño actual. Te lo explico en dos capas: formal (teoría) y luego cómo lo estás aplicando tú ahora mismo.
+
+🧠 🧱 SOLID
+
+SOLID es un conjunto de 5 principios de diseño orientados a crear software:
+
+mantenible
+escalable
+testeable
+desacoplado
+
+1️⃣ S — Single Responsibility Principle (SRP)
+📘 Formal
+
+Una clase debe tener una sola razón para cambiar.
+
+🧠 En palabras simples
+
+Cada clase debe hacer una sola cosa bien.
+
+🚀 En tu proyecto
+
+✔ ProviderClient → solo comunica con el proveedor
+✔ TransactionService → solo orquesta el flujo
+✔ TransactionDomain → reglas de negocio
+✔ Mapper → solo mapea objetos
+✔ Controller → solo expone endpoints
+
+⚠️ ERROR típico que evitaste bien
+
+❌ meter validaciones + DB + HTTP en el mismo service
+
+
+2️⃣ O — Open / Closed Principle (OCP)
+📘 Formal
+
+El software debe estar abierto para extensión, pero cerrado para modificación.
+
+🧠 Simple
+
+Debes poder agregar funcionalidad sin romper lo existente.
+
+🚀 En tu proyecto
+
+✔ agregaste ProviderException sin modificar controller
+✔ puedes agregar nuevos errores sin cambiar service principal
+✔ mappers permiten extender sin tocar lógica core
+
+💡 Ejemplo real
+mapErrorToDescription()
+
+👉 puedes agregar nuevos errores sin cambiar todo el flujo
+
+3️⃣ L — Liskov Substitution Principle (LSP)
+📘 Formal
+
+Las clases derivadas deben poder sustituir a sus clases base sin romper el sistema.
+
+🧠 Simple
+
+Si reemplazas una implementación, el sistema debe seguir funcionando.
+
+🚀 En tu proyecto
+
+Tu interfaz:
+
+TransactionExecutor
+
+Implementaciones posibles:
+
+ProviderClient
+MockProviderClient
+Future StripeClient
+
+👉 todas deben funcionar igual para el service
+
+
+
+4️⃣ I — Interface Segregation Principle (ISP)
+📘 Formal
+
+Es mejor tener interfaces pequeñas y específicas que una grande.
+
+🧠 Simple
+
+No obligues a una clase a implementar cosas que no usa.
+
+🚀 En tu proyecto
+
+✔ TransactionExecutor es buena práctica
+✔ no mezclas provider + DB + cache en una sola interfaz
+
+💡 Ejemplo ideal
+TransactionExecutor
+
+solo:
+
+execute()
+
+👉 perfecto
+
+
+5️⃣ D — Dependency Inversion Principle (DIP)
+📘 Formal
+
+Los módulos de alto nivel no deben depender de módulos de bajo nivel. Ambos deben depender de abstracciones.
+
+🧠 Simple
+
+Depende de interfaces, no de clases concretas.
+
+🚀 En tu proyecto
+
+✔ Service depende de:
+
+TransactionExecutor
+
+❌ NO de:
+
+RestTemplate
+ProviderClient
+⚠️ mejora que hiciste correctamente después
+
+Antes:
+
+new RestTemplate()
+
+Ahora:
+
+👉 encapsulado dentro del client
+
+
+
