@@ -14,4 +14,5 @@ public class ProviderErrorResponse {
     private String code;
     private String status;
     private String message;
+    private String httpStatus;
 }

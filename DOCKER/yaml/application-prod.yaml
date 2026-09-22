@@ -6,6 +6,17 @@ spring:
     url: jdbc:postgresql://host.docker.internal:5433/localcredit
     username: postgres
     password: 150919
+    hikari:
+      pool-name: SpinHikariPool
+
+      maximum-pool-size: 15
+      minimum-idle: 5
+
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 20000
+
+      leak-detection-threshold: 30000
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -15,6 +26,16 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      providerService:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+
 
 provider:
   url: http://localhost:8085/provider/v1/execute

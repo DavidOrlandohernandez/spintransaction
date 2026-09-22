@@ -3,6 +3,7 @@ package com.spin.transaction.client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spin.transaction.dto.provider.ProviderRequest;
 import com.spin.transaction.dto.provider.ProviderResponse;
+import com.spin.transaction.enums.TransactionStatus;
 import com.spin.transaction.exception.ProviderException;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -48,41 +49,57 @@ public class ProviderClient  implements TransactionExecutor{
                     ProviderResponse.class
             );
 
-        } catch (HttpClientErrorException | HttpServerErrorException ex) {
+        }  catch (HttpClientErrorException | HttpServerErrorException ex) {
+
+            String body = ex.getResponseBodyAsString();
+            log.error("RAW provider error: {}", body);
+
+            ProviderErrorResponse error = null;
+
             try {
-
-                log.info("Error inesperado de proveedor: : {}", request.getAccountId());
-                ProviderErrorResponse error =
-                        objectMapper.readValue(
-                                ex.getResponseBodyAsString(),
-                                ProviderErrorResponse.class
-                        );
-
-                log.info("Error inesperado de proveedor:{},{},{}", error.getMessage(), error.getStatus(), error.getCode());
-                throw new ProviderException(
-                        error.getStatus(),
-                        error.getCode(),
-                        error.getMessage()
-                );
-
+                error = objectMapper.readValue(body, ProviderErrorResponse.class);
             } catch (Exception parseException) {
-                throw new ProviderException(
-                        "400",
-                        "UNKNOWN_ERROR",
-                        "Error calling provider"
-                );
+                log.warn("No se pudo mapear error del provider");
             }
+
+            String code = (error != null) ? error.getCode() : "UNKNOWN_ERROR";
+            String status = (error != null) ? error.getStatus() : TransactionStatus.REJECTED.toString();
+
+            String message = (error != null) ? error.getMessage() : body;
+
+            throw new ProviderException(
+                    code,
+                    status,
+                    message,
+                    ex.getStatusCode().value() + ""
+            );
         }
     }
 
     public ProviderResponse fallback(ProviderRequest request, Throwable ex) {
 
-        log.error("Provider falló: {}", ex.getMessage());
+        log.error("Fallback ejecutado para accountId: {}", request.getAccountId());
 
+        if (ex instanceof ProviderException providerEx) {
+
+            log.error("ProviderException code: {}, status: {}",
+                    providerEx.getCode(),
+                    providerEx.getStatus());
+
+            throw new ProviderException(
+                    providerEx.getCode(),
+                    providerEx.getStatus(),
+                    providerEx.getMessage(),
+                    providerEx.getHttpStatus()
+            );
+        }
+
+        // 🔥 fallback genérico (circuit breaker, timeout, etc)
         throw new ProviderException(
-                "400",
-                "UNKNOWN_ERROR",
-                "Error calling provider"
+                "REJECTED",
+                "SERVICE_UNAVAILABLE",
+                "Provider is currently unavailable",
+                "503"
         );
     }
 }

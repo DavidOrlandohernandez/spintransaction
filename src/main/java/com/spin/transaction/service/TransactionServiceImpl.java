@@ -83,14 +83,19 @@ public class TransactionServiceImpl implements ITransactionService {
 
             log.warn("Proveedor acepto transacción accountId: {}", request.getAccountId());
             domain.markAsExecuted(
-                    response.getStatus(),
+                    String.valueOf(response.getStatus()),
                     response.getTransactionId(),
                     response.getBalance()
             );
 
         } catch (ProviderException ex) {
             log.warn("Proveedor rechazó transacción accountId: {}", request.getAccountId());
-            domain.markAsRejected();
+            domain.markAsRejected(
+                    ex.getCode(),
+                    ex.getStatus(),
+                    ex.getMessage(),
+                    ex.getHttpStatus()
+            );
         }
 
         Transaction entity = TransactionDomainMapper.INSTANCE.transactionDomainToTransaction(domain);

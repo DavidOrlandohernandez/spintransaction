@@ -10,4 +10,4 @@ Ejemplo:  url: jdbc:postgresql://localhost:5432/localcredit
 3.- Abrir una linea de comando en la carpeta LOCAL que viene en el proyecto. 
 
 4.- Ejecutar el siguiente comando:
-java -jar app.jar --spring.profiles.active=prod
+java -jar app.jar --spring.profiles.active=dev

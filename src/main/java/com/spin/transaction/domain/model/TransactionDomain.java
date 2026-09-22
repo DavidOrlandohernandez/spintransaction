@@ -16,9 +16,9 @@ public class TransactionDomain {
     private final TransactionType type;
     private final BigDecimal amount;
     private final String currency;
-    private final String description;
+    private  String description;
 
-    private TransactionStatus status;
+    private String status;
     private String providerTransactionId;
     private BigDecimal balanceAfter;
 
@@ -49,14 +49,36 @@ public class TransactionDomain {
 
     }
 
-    public void markAsExecuted(TransactionStatus status, String providerId, BigDecimal balance) {
-        this.status = status;
+    public void markAsExecuted(String status, String providerId, BigDecimal balance) {
+        this.status =  status;
         this.providerTransactionId = providerId;
         this.balanceAfter = balance;
     }
 
-    public void markAsRejected() {
-        this.status = TransactionStatus.REJECTED;
+    public void markAsRejected(String code, String status, String message, String httpStatus) {
+       // this.status = TransactionStatus.REJECTED;
+        this.status = status;
+        this.providerTransactionId = null;
+        this.balanceAfter = null;
+        this.description = mapErrorToDescription(code, message, httpStatus );
+    }
+
+    private String mapErrorToDescription(String code, String message, String httpStatus) {
+
+        if ("400".equals(httpStatus)) {
+
+            if ("INSUFFICIENT_FUNDS".equals(code)) {
+                return message;
+            }
+
+            return "Error en la solicitud al proveedor";
+        }
+
+        if ("500".equals(httpStatus)) {
+            return "Error interno del proveedor, intente más tarde";
+        }
+
+        return message != null ? message : "Error desconocido";
     }
 
 }
